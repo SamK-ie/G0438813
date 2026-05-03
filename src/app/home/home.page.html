@@ -1,20 +1,36 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>G0438813</ion-title>
+      <ion-buttons slot="end">
+        <ion-button routerLink="/favourites">
+          <ion-icon name=""heart"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-item>
+    <ion-label position="stacked">Search Movie Name</ion-label>
+      <ion-input [(ngModel)]="searchQuery" placeholder="Enter movie name"></ion-input>
+  </ion-item>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-button expand="full" (click)="onSearch()">SEARCH</ion-button>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>{{ listTitle }}</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="Let movie of movies" [routerLink]="['/movie-details', movie.id]">
+      <ion-thumbnail slot="start">
+        <img [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ movie.title }}</h2>
+        <p>{{ movie.release_date | date:'yyyy' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+

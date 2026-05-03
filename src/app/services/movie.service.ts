@@ -13,10 +13,12 @@ export class MovieService {
 
   constructor(private http: HttpClient){}
 
+  //code to obtain the daily trending movies from db
   getTrendingMovies(): Observable<any> {
     return this.http.get('${this.baseUrl}/trending/movie/day?query=${query}&api_key=&{this.apiKey}');
   }
 
+  //code to allow searching of movies by name
   searchMovies(query: string): Observable<any> {
     return this.http.get('${this.baseUrl}/search/movie?query=${query}&api_key=&{this.apiKey}');
   }
