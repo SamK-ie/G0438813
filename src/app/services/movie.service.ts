@@ -11,18 +11,22 @@ export class MovieService {
   private apiKey = environment.apiKey;
   private baseUrl = 'https://api.themoviedb.org/3';
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  //code to obtain the daily trending movies from db
   getTrendingMovies(): Observable<any> {
-    return this.http.get('${this.baseUrl}/trending/movie/day?query=${query}&api_key=&{this.apiKey}');
-  }
+  // Make sure the endpoint is /trending/movie/day
+  return this.http.get(`${this.baseUrl}/trending/movie/day?api_key=${this.apiKey}`);
+}
 
   //code to allow searching of movies by name
-  searchMovies(query: string): Observable<any> {
-    return this.http.get('${this.baseUrl}/search/movie?query=${query}&api_key=&{this.apiKey}');
-  }
-  }
-
-  
+ searchMovies(query: string): Observable<any> {
+  // Ensure the URL has: api_key=${this.apiKey}&query=${query}
+  return this.http.get(`${this.baseUrl}/search/movie?api_key=${this.apiKey}&query=${query}`);
 }
+
+  getMovieCredits(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/movie/${id}/credits?api_key=${this.apiKey}`);
+  }
+}
+
+

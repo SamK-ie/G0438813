@@ -1,18 +1,21 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>G0438813</ion-title>
-      <ion-buttons slot="end">
-        <ion-button routerLink="/favourites">
-          <ion-icon name=""heart"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/favourites">
+        <ion-icon name="heart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-item>
     <ion-label position="stacked">Search Movie Name</ion-label>
-      <ion-input [(ngModel)]="searchQuery" placeholder="Enter movie name"></ion-input>
+    <ion-input
+      [(ngModel)]="searchQuery"
+      placeholder="Enter movie name"
+    ></ion-input>
   </ion-item>
 
   <ion-button expand="full" (click)="onSearch()">SEARCH</ion-button>
@@ -22,7 +25,10 @@
       <ion-label>{{ listTitle }}</ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="Let movie of movies" [routerLink]="['/movie-details', movie.id]">
+    <ion-item
+      *ngFor="let movie of movies"
+      [routerLink]="['/movie-details', movie.id]"
+    >
       <ion-thumbnail slot="start">
         <img [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path" />
       </ion-thumbnail>
@@ -33,4 +39,3 @@
     </ion-item>
   </ion-list>
 </ion-content>
-

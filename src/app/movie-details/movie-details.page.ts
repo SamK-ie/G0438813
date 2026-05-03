@@ -3,14 +3,35 @@ import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../services/movie.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton } from '@ionic/angular/standalone';
-
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonItem,
+  IonLabel,
+  IonList
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.page.html',
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonItem,
+    IonLabel,
+    IonList,
+    CommonModule,
+    FormsModule,
+  ],
 })
 export class MovieDetailsPage implements OnInit {
   movie: any;
@@ -18,8 +39,8 @@ export class MovieDetailsPage implements OnInit {
   crew: any[] = [];
 
   constructor(
-    private route: ActivatedRoute, 
-    private movieService: MovieService
+    private route: ActivatedRoute,
+    private movieService: MovieService,
   ) {}
 
   ngOnInit() {
@@ -32,7 +53,7 @@ export class MovieDetailsPage implements OnInit {
 
   loadDetails(id: number) {
     // Get credits of cast/crew
-    this.movieService.getMovieCredits(id).subscribe(res => {
+    this.movieService.getMovieCredits(id).subscribe((res: any) => {
       this.cast = res.cast;
       this.crew = res.crew;
     });
