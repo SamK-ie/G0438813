@@ -23,9 +23,9 @@ import {
   IonBackButton,
 } from '@ionic/angular/standalone';
 @Component({
-  selector: 'app-favourites',
-  templateUrl: './favourites.page.html',
-  styleUrls: ['./favourites.page.scss'],
+  selector: 'app-movie-credits',
+  templateUrl: './movie-credits.page.html',
+  styleUrls: ['./movie-credits.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -48,10 +48,8 @@ import {
     IonBackButton,
   ],
 })
-export class FavouritesPage implements OnInit {
-  constructor() {
-    addIcons({ home, heart, star, videocam });
-  }
+export class MovieCreditsPage implements OnInit {
+  constructor() {}
 
   ngOnInit() {}
 }

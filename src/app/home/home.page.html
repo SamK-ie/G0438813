@@ -1,25 +1,51 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>G0438813</ion-title>
+    <ion-title>
+      <ion-icon name="home" class="home-icon"></ion-icon>
+      G0438813
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/favourites">
-        <ion-icon name="heart"></ion-icon>
+      <ion-button routerLink="/home" >
+        <ion-icon name="home" class="home-icon"></ion-icon>
+      </ion-button>
+      <ion-button routerLink="/favorites">
+        <ion-icon name="heart" class="heart-icon"></ion-icon>
+      </ion-button>
+      <ion-button routerLink="/movie-details/null">
+        <ion-icon name="videocam" class="videocam-icon  "></ion-icon>
+      </ion-button>
+      <ion-button routerLink="/movie-credits">
+        <ion-icon name="star" class="star-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true">]
+
+  <form (submit)="onSearch()">
   <ion-item>
     <ion-label position="stacked">Search Movie Name</ion-label>
     <ion-input
       [(ngModel)]="searchQuery"
+      name="searchQuery"
       placeholder="Enter movie name"
     ></ion-input>
   </ion-item>
 
-  <ion-button expand="full" (click)="onSearch()">SEARCH</ion-button>
+  <ion-button expand="full" type="submit">SEARCH</ion-button>
+  </form>
 
+  <div *ngIf="searchHistory.length > 0" class="ion-padding">
+  <ion-label color="medium">Recent Searches:</ion-label>
+  <div class="history-container">
+    <ion-chip *ngFor="let item of searchHistory" (click)="searchQuery = item; onSearch()">
+      <ion-label>{{ item }}</ion-label>
+      <ion-icon name="time-outline"></ion-icon>
+    </ion-chip>
+  </div>
+  </div>
+  
   <ion-list>
     <ion-list-header>
       <ion-label>{{ listTitle }}</ion-label>
@@ -30,7 +56,7 @@
       [routerLink]="['/movie-details', movie.id]"
     >
       <ion-thumbnail slot="start">
-        <img [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path" />
+        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
       </ion-thumbnail>
       <ion-label>
         <h2>{{ movie.title }}</h2>
