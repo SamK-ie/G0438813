@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../services/movie.service';
 import { addIcons } from 'ionicons';
@@ -69,8 +70,14 @@ export class FavouritesPage implements OnInit {
   searchQuery: string = '';
   viewMode: 'movies' | 'cast' = 'movies';
 
-  constructor() {
+  constructor(private movieService: MovieService, private router: Router) {
     addIcons({ home, heart, star, videocam, trash, searchOutline, heartDislikeOutline, peopleOutline, trendingUpOutline, timeOutline });
+  }
+
+  openHistory() {
+    // This matches the 'cast-crew-details' path in your app.routes.ts
+    // It navigates to the page without an ID, triggering isSearchMode = true
+    this.router.navigate(['/cast-crew-details']); //
   }
 
   ngOnInit() {

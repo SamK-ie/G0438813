@@ -2,10 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../services/movie.service';
 import { addIcons } from 'ionicons';
-import { home, heart, star, videocam, filmOutline, searchOutline, trendingUpOutline, timeOutline } from 'ionicons/icons';
+import {
+  home,
+  heart,
+  star,
+  videocam,
+  filmOutline,
+  searchOutline,
+  trendingUpOutline,
+  timeOutline,
+} from 'ionicons/icons';
 import {
   IonHeader,
   IonToolbar,
@@ -56,8 +66,17 @@ export class HomePage implements OnInit {
   listTitle: string = 'Trending Movies';
   searchHistory: string[] = [];
 
-  constructor(private movieService: MovieService) {
-    addIcons({ home, heart, star, videocam, filmOutline,searchOutline, trendingUpOutline, timeOutline });
+  constructor(private movieService: MovieService, private router: Router) {
+    addIcons({
+      home,
+      heart,
+      star,
+      videocam,
+      filmOutline,
+      searchOutline,
+      trendingUpOutline,
+      timeOutline,
+    });
   }
 
   ngOnInit() {
@@ -66,6 +85,12 @@ export class HomePage implements OnInit {
     if (saved) {
       this.searchHistory = JSON.parse(saved);
     }
+  }
+
+  openHistory() {
+    // This matches the 'cast-crew-details' path in your app.routes.ts
+    // It navigates to the page without an ID, triggering isSearchMode = true
+    this.router.navigate(['/cast-crew-details']); //
   }
 
   loadTrending() {
@@ -82,31 +107,31 @@ export class HomePage implements OnInit {
   }
 
   onSearch(event?: Event) {
-  if (event) {
-    event.preventDefault(); // Prevents page refresh on form submit
+    if (event) {
+      event.preventDefault(); // Prevents page refresh on form submit
+    }
+
+    const searchText = this.searchQuery.trim();
+
+    if (searchText === '') {
+      this.loadTrending();
+      return; // Exit early if search is empty
+    }
+
+    // 1. Update Search History
+    this.searchHistory.unshift(searchText);
+    // Filter to keep only unique items and limit to 5
+    this.searchHistory = [...new Set(this.searchHistory)].slice(0, 5);
+    localStorage.setItem('recentSearches', JSON.stringify(this.searchHistory));
+
+    // 2. Perform the Search
+    this.listTitle = `Search Results for: ${searchText}`;
+    this.movieService.searchMovies(searchText).subscribe({
+      next: (res: any) => {
+        this.movies = res.results;
+        console.log('Search results:', this.movies);
+      },
+      error: (err) => console.error('Search failed:', err),
+    });
   }
-
-  const searchText = this.searchQuery.trim();
-
-  if (searchText === '') {
-    this.loadTrending();
-    return; // Exit early if search is empty
-  }
-
-  // 1. Update Search History
-  this.searchHistory.unshift(searchText);
-  // Filter to keep only unique items and limit to 5
-  this.searchHistory = [...new Set(this.searchHistory)].slice(0, 5);
-  localStorage.setItem('recentSearches', JSON.stringify(this.searchHistory));
-
-  // 2. Perform the Search
-  this.listTitle = `Search Results for: ${searchText}`;
-  this.movieService.searchMovies(searchText).subscribe({
-    next: (res: any) => {
-      this.movies = res.results;
-      console.log('Search results:', this.movies);
-    },
-    error: (err) => console.error('Search failed:', err)
-  });
-}
 }

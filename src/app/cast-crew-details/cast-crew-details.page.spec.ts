@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PersonDetailsPage } from './movie-credits.page';
+import { PersonDetailsPage } from './cast-crew-details.page';
 
 describe('PersonDetailsPage', () => {
   let component: PersonDetailsPage;

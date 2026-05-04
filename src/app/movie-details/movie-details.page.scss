@@ -1,31 +1,9 @@
-.poster-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  background: #000;
-  
-  .main-poster {
-    max-height: 400px;
-    object-fit: cover;
-  }
-}
+
 
 .trending-badge {
   font-size: 0.9rem;
   padding: 8px 12px;
   border-radius: 20px;
   margin-bottom: 15px;
-}
-
-.movie-blurb {
-  line-height: 1.6;
-  font-size: 1rem;
-  color: var(--ion-color-step-600, #666);
-}
-
-.section-subtitle {
-  font-weight: bold;
-  margin-top: 20px;
-  font-size: 1.1rem;
 }
 

@@ -94,20 +94,30 @@ export class MovieDetailsPage implements OnInit {
     });
   }
 
+
+
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    console.log("Current ID from URL:", id);
+    console.log('Current ID from URL:', id);
 
     if (!id || id === 'null') {
       this.isHistoryMode = true;
       const saved = localStorage.getItem('recentlyViewedMovies');
       this.recentlyViewedMovies = saved ? JSON.parse(saved) : [];
-      console.log("Loaded History:", this.recentlyViewedMovies);
+      console.log('Loaded History:', this.recentlyViewedMovies);
     } else {
       this.isHistoryMode = false;
       this.loadDetails(Number(id));
       this.getCast(id);
     }
+  }
+
+    openHistory() {
+    this.router.navigate(['/cast-crew-details']);
+  }
+
+  goToCredits(id: number) {
+    this.router.navigate(['/cast-crew-details', id]);
   }
 
   ionViewWillEnter() {
@@ -125,23 +135,28 @@ export class MovieDetailsPage implements OnInit {
   }
 
   loadDetails(id: number) {
-  this.movieService.getMovieDetails(id).subscribe((res: any) => {
-    this.movie = res;
+    this.movieService.getMovieDetails(id).subscribe((res: any) => {
+      this.movie = res;
 
-    let history = JSON.parse(localStorage.getItem('recentlyViewedMovies') || '[]');
-    
-    // Add the new movie to the start
-    history.unshift(res);
+      let history = JSON.parse(
+        localStorage.getItem('recentlyViewedMovies') || '[]',
+      );
 
-    // FIX: Ensure we compare IDs strictly as numbers to remove duplicates
-    history = history.filter((v: any, i: number, a: any[]) => 
-      a.findIndex((t: any) => Number(t.id) === Number(v.id)) === i
-    ).slice(0, 5);
+      // Add the new movie to the start
+      history.unshift(res);
 
-    localStorage.setItem('recentlyViewedMovies', JSON.stringify(history));
-    this.recentlyViewedMovies = history; // Update the local variable immediately
-  });
-}
+      // FIX: Ensure we compare IDs strictly as numbers to remove duplicates
+      history = history
+        .filter(
+          (v: any, i: number, a: any[]) =>
+            a.findIndex((t: any) => Number(t.id) === Number(v.id)) === i,
+        )
+        .slice(0, 5);
+
+      localStorage.setItem('recentlyViewedMovies', JSON.stringify(history));
+      this.recentlyViewedMovies = history; // Update the local variable immediately
+    });
+  }
 
   getCast(id: string | number) {
     // Get credits of cast/crew
