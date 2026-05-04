@@ -1,12 +1,10 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title
-      ><ion-icon name="videocam" class="videocam-icon"></ion-icon> Movie
-      Details</ion-title
-    >
+    <ion-title><ion-icon name="videocam" class="videocam-icon"></ion-icon> Movie
+      Details</ion-title>
     <ion-buttons slot="end">
       <ion-button routerLink="/home">
         <ion-icon name="home" class="home-icon"></ion-icon>
@@ -14,7 +12,7 @@
       <ion-button routerLink="/favorites">
         <ion-icon name="heart" class="heart-icon"></ion-icon>
       </ion-button>
-      <ion-button routerLink="/movie-details/null">
+      <ion-button (click)="isHistoryMode = !isHistoryMode">
         <ion-icon name="videocam" class="videocam-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/movie-credits">
@@ -25,28 +23,62 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form (submit)="onSearch()">
-    <ion-item>
-      <ion-label position="stacked">Search Movie Name</ion-label>
-      <ion-input
-        [(ngModel)]="searchQuery"
-        name="searchQuery"
-        placeholder="Enter movie name"
-      ></ion-input>
-    </ion-item>
+  <div class="search-section ion-padding">
+    <h2 class="search-title">Search Movie</h2>
 
-    <ion-button expand="full" type="submit">SEARCH</ion-button>
-  </form>
+    <form (submit)="onSearch()">
+      <ion-input [(ngModel)]="searchQuery" name="searchQuery" placeholder="Enter movie name" ngDefaultControl>
+      </ion-input>
+      <ion-button expand="full" type="submit">SEARCH</ion-button>
+    </form>
+  </div>
 
   <!-- MODE A: Movie Details -->
   <div *ngIf="!isHistoryMode && movie">
-    <ion-card>
-      <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
-      <ion-card-header>
-        <ion-card-title>{{ movie.title }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>{{ movie.overview }}</ion-card-content>
-    </ion-card>
+    <div class="poster-container">
+      <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" class="main-poster" />
+    </div>
+
+    <div class="ion-padding">
+      <!-- Trending Rank -->
+      <ion-badge color="warning" class="trending-badge">
+        <ion-icon name="trending-up-outline"></ion-icon>
+        #{{ movie.popularity | number:'1.0-0' }} in Trending Today
+      </ion-badge>
+
+      <h1>{{ movie.title }}</h1>
+      <h2 class="section-title">{{ movie.title }}</h2>
+      <p class="movie-blurb">{{ movie.overview }}</p>
+
+      <hr class="divider" />
+
+      <!-- TOP CAST SECTION -->
+      <h3 class="section-subtitle">Top Cast</h3>
+      <div class="cast-scroll-wrapper">
+        <!-- Use the loop directly on the card for horizontal behavior -->
+        <div class="cast-card" *ngFor="let castMember of cast" [routerLink]="['/movie-credits', movie?.id]">
+    <div class="avatar-circle">
+      <img [src]="castMember.profile_path ? 'https://image.tmdb.org/t/p/w185' + castMember.profile_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+    </div>
+    <p class="main-text">{{ castMember.name }}</p>
+    <p class="sub-text">{{ castMember.character }}</p>
+  </div>
+</div>
+
+      <hr class="divider" />
+
+      <!-- PRODUCTION CREW SECTION -->
+      <h3 class="section-subtitle">Production Crew</h3>
+      <div class="cast-scroll-wrapper">
+     <div class="cast-card" *ngFor="let member of crew" [routerLink]="['/movie-credits', movie?.id]">
+    <div class="avatar-circle">
+      <img [src]="member.profile_path ? 'https://image.tmdb.org/t/p/w185' + member.profile_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+    </div>
+    <p class="main-text">{{ member.name }}</p>
+    <p class="sub-text">{{ member.job }}</p>
+  </div>
+</div>
+    </div>
   </div>
 
   <!-- MODE B: Recently Viewed List -->
@@ -55,11 +87,8 @@
       <ion-label>Recently Viewed Movies</ion-label>
     </ion-list-header>
 
-    <ion-item
-      *ngFor="let m of recentMovies"
-      [routerLink]="['/movie-details', m.id]"
-      (click)="loadDetails(m.id); isHistoryMode = false"
-    >
+    <ion-item *ngFor="let m of recentlyViewedMovies" [routerLink]="['/movie-details', m.id]"
+      (click)="loadDetails(m.id); isHistoryMode = false">
       <ion-thumbnail slot="start">
         <img [src]="'https://image.tmdb.org/t/p/w92' + m.poster_path" />
       </ion-thumbnail>
@@ -68,8 +97,9 @@
       </ion-label>
     </ion-item>
 
-    <div *ngIf="recentMovies.length === 0" class="ion-padding ion-text-center">
-      <p>No recently viewed movies. Start searching!</p>
+    <div *ngIf="recentlyViewedMovies.length === 0" class="ion-padding ion-text-center">
+      <ion-icon name="videocam-off-outline" style="font-size: 64px; color: #8c8c8c;"></ion-icon>
+      <p style="color: #8c8c8c;">No recently viewed movies. Start searching!</p>
     </div>
   </div>
 </ion-content>

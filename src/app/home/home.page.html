@@ -1,18 +1,18 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>
       <ion-icon name="home" class="home-icon"></ion-icon>
       G0438813
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/home" >
+      <ion-button routerLink="/home">
         <ion-icon name="home" class="home-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/favorites">
         <ion-icon name="heart" class="heart-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/movie-details/null">
-        <ion-icon name="videocam" class="videocam-icon  "></ion-icon>
+        <ion-icon name="videocam" class="videocam-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/movie-credits">
         <ion-icon name="star" class="star-icon"></ion-icon>
@@ -21,42 +21,40 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">]
+<ion-content [fullscreen]="true">
+  <div class="search-section ion-padding">
+    <h2 class="search-title">Search Movie</h2>
 
-  <form (submit)="onSearch()">
-  <ion-item>
-    <ion-label position="stacked">Search Movie Name</ion-label>
-    <ion-input
-      [(ngModel)]="searchQuery"
-      name="searchQuery"
-      placeholder="Enter movie name"
-    ></ion-input>
-  </ion-item>
+    <form (submit)="onSearch($event)">
+      <ion-item line="none" class="custom-input-item">
+        <ion-input [(ngModel)]="searchQuery" name="searchQuery" placeholder="Enter movie name" clearInput="true"
+          ngDefaultControl>
+        </ion-input>
+      </ion-item>
 
-  <ion-button expand="full" type="submit">SEARCH</ion-button>
-  </form>
+      <ion-button expand="full" type="submit">SEARCH</ion-button>
+    </form>
+  </div>
 
   <div *ngIf="searchHistory.length > 0" class="ion-padding">
-  <ion-label color="medium">Recent Searches:</ion-label>
-  <div class="history-container">
-    <ion-chip *ngFor="let item of searchHistory" (click)="searchQuery = item; onSearch()">
-      <ion-label>{{ item }}</ion-label>
-      <ion-icon name="time-outline"></ion-icon>
-    </ion-chip>
+    <ion-label color="medium">Recent Searches:</ion-label>
+    <div class="history-container">
+      <ion-chip *ngFor="let item of searchHistory" (click)="searchQuery = item; onSearch()">
+        <ion-label>{{ item }}</ion-label>
+        <ion-icon name="time-outline"></ion-icon>
+      </ion-chip>
+    </div>
   </div>
-  </div>
-  
-  <ion-list>
-    <ion-list-header>
-      <ion-label>{{ listTitle }}</ion-label>
-    </ion-list-header>
 
-    <ion-item
-      *ngFor="let movie of movies"
-      [routerLink]="['/movie-details', movie.id]"
-    >
+  <ion-list-header>
+    <ion-label>{{ listTitle }}</ion-label>
+  </ion-list-header>
+
+  <ion-list *ngIf="movies.length > 0">
+    <ion-item *ngFor="let movie of movies" [routerLink]="['/movie-details', movie.id]">
       <ion-thumbnail slot="start">
-        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+        <img
+          [src]="movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
       </ion-thumbnail>
       <ion-label>
         <h2>{{ movie.title }}</h2>
@@ -64,4 +62,17 @@
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <div *ngIf="movies.length === 0 && searchQuery !== ''" class="ion-text-center ion-padding">
+    <ion-icon name="search-outline" style="font-size: 64px; color: var(--ion-color-step-400);"></ion-icon>
+    <p>No movies found matching "{{ searchQuery }}".</p>
+    <ion-button fill="clear" (click)="searchQuery = ''; loadTrending()">View Trending</ion-button>
+  </div>
+
+  <!-- Case 3: Initial Empty State (Optional if Trending is loaded) -->
+  <div *ngIf="movies.length === 0 && searchQuery === ''" class="ion-text-center ion-padding">
+    <ion-icon name="film-outline" style="font-size: 64px; color: var(--ion-color-step-400);"></ion-icon>
+    <p>Loading trending movies...</p>
+  </div>
+
 </ion-content>

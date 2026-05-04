@@ -1,10 +1,10 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      <ion-icon name="heart" class="heart-icon"></ion-icon> 
+      <ion-icon name="heart" class="heart-icon"></ion-icon>
       Favourites</ion-title>
     <ion-buttons slot="end">
       <ion-button routerLink="/home">
@@ -21,13 +21,95 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="viewMode" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="movies">
+        <ion-label>Movies</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="cast">
+        <ion-label>Cast</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 
 <ion-content [fullscreen]="true">
+  <div class="search-section ion-padding">
+    <h2 class="search-title">Search Favourites</h2>
+
+    <form (submit)="onSearch()">
+      <ion-item lines="none" class="custom-input-item">
+        <ion-input [(ngModel)]="searchQuery" (ionInput)="filterResults()"
+          placeholder="Enter favourite movie or cast name" show-clear-button="always"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" type="submit">SEARCH</ion-button>
+    </form>
+  </div>
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Favourites</ion-title>
     </ion-toolbar>
   </ion-header>
+
+
+  <!-- VIEW 1: MOVIES -->
+  <div *ngIf="viewMode === 'movies'">
+    <ion-list *ngIf="filteredMovies.length > 0">
+      <ion-item-sliding *ngFor="let movie of filteredMovies">
+        <ion-item [routerLink]="['/movie-details', movie.id]">
+          <ion-thumbnail slot="start">
+            <img [src]="'https://image.tmdb.org/t/p/w92' + movie.poster_path" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ movie.title }}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="removeFromFav(movie.id, 'movie')">
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <div *ngIf="favMovies.length > 0 && filteredMovies.length === 0" class="ion-text-center ion-padding">
+      <ion-icon name="search-outline" style="font-size: 48px; color: gray;"></ion-icon>
+      <p>No matching movies found for "{{ searchQuery }}".</p>
+    </div>
+
+    <div *ngIf="favMovies.length === 0" class="ion-text-center ion-padding">
+      <ion-icon name="heart-dislike-outline" style="font-size: 48px; color: gray;"></ion-icon>
+      <p>You haven't favorited any movies yet.</p>
+    </div>
+  </div>
+
+  <!-- VIEW 2: CAST -->
+  <div *ngIf="viewMode === 'cast'">
+    <ion-list *ngIf="filteredCast.length > 0">
+      <ion-item-sliding *ngFor="let castItem of filteredCast">
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img [src]="'https://image.tmdb.org/t/p/w92' + castItem.profile_path" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ castItem.name }}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="removeFromFav(castItem.id, 'cast')">
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    <div *ngIf="favCast.length > 0 && filteredCast.length === 0" class="ion-text-center">
+      <p>No matches found.</p>
+    </div>
+    <div *ngIf="favCast.length === 0" class="ion-text-center">
+      <p>No favorite cast yet.</p>
+    </div>
+  </div>
 </ion-content>

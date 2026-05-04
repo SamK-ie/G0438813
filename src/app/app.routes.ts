@@ -19,7 +19,7 @@ export const routes: Routes = [
     loadComponent: () => import('./movie-details/movie-details.page').then((m) => m.MovieDetailsPage),
   },
   {
-    path: 'movie-credits',
+    path: 'movie-credits/:id',
     loadComponent: () => import('./movie-credits/movie-credits.page').then((m) => m.MovieCreditsPage),
   },
   {

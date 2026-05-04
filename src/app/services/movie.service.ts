@@ -28,8 +28,16 @@ export class MovieService {
     return this.http.get(`${this.baseUrl}/movie/${id}?api_key=${this.apiKey}`);
   }
 
-  getMovieCredits(id: number): Observable<any> {
+  getMovieCredits(id: string | number): Observable<any> {
     return this.http.get(`${this.baseUrl}/movie/${id}/credits?api_key=${this.apiKey}`);
+  }
+
+  getFavourites() {
+    return JSON.parse(localStorage.getItem('fav_movies') || '[]');
+  }
+
+  getFavouriteCast() {
+
   }
 }
 

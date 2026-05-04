@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../services/movie.service';
 import { addIcons } from 'ionicons';
-import { home, heart, star, videocam } from 'ionicons/icons';
+import { home, heart, star, videocam, filmOutline, searchOutline, trendingUpOutline, timeOutline } from 'ionicons/icons';
 import {
   IonHeader,
   IonToolbar,
@@ -50,13 +50,14 @@ import {
   ],
 })
 export class HomePage implements OnInit {
+  isHistoryMode: boolean = false;
   movies: any[] = [];
   searchQuery: string = '';
   listTitle: string = 'Trending Movies';
   searchHistory: string[] = [];
 
   constructor(private movieService: MovieService) {
-    addIcons({ home, heart, star, videocam });
+    addIcons({ home, heart, star, videocam, filmOutline,searchOutline, trendingUpOutline, timeOutline });
   }
 
   ngOnInit() {
@@ -81,39 +82,31 @@ export class HomePage implements OnInit {
   }
 
   onSearch(event?: Event) {
-    if (event) {
-      event.preventDefault(); // This stops the page from refreshing
-    }
-
-    const searchText = this.searchQuery.trim();
-
-    if (this.searchQuery.trim() === '') {
-      this.loadTrending();
-    } else {
-      this.searchHistory.unshift(searchText);
-      this.searchHistory = [...new Set(this.searchHistory)].slice(0, 5);
-      localStorage.setItem(
-        'recentSearches',
-        JSON.stringify(this.searchHistory),
-      );
-      this.listTitle = 'Search Results for: ' + searchText;
-      this.movieService.searchMovies(searchText).subscribe((res: any) => {
-        this.movies = res.results;
-        console.log('Search results:', this.movies);
-      });
-    }
-
-    if (this.searchQuery.trim() !== '') {
-      this.searchHistory.unshift(this.searchQuery);
-      this.searchHistory = [...new Set(this.searchHistory)].slice(0, 5);
-      localStorage.setItem(
-        'recentSearches',
-        JSON.stringify(this.searchHistory),
-      );
-      this.movieService.searchMovies(this.searchQuery).subscribe((res: any) => {
-        this.movies = res.results;
-        this.listTitle = 'Search Results for: ' + this.searchQuery;
-      });
-    }
+  if (event) {
+    event.preventDefault(); // Prevents page refresh on form submit
   }
+
+  const searchText = this.searchQuery.trim();
+
+  if (searchText === '') {
+    this.loadTrending();
+    return; // Exit early if search is empty
+  }
+
+  // 1. Update Search History
+  this.searchHistory.unshift(searchText);
+  // Filter to keep only unique items and limit to 5
+  this.searchHistory = [...new Set(this.searchHistory)].slice(0, 5);
+  localStorage.setItem('recentSearches', JSON.stringify(this.searchHistory));
+
+  // 2. Perform the Search
+  this.listTitle = `Search Results for: ${searchText}`;
+  this.movieService.searchMovies(searchText).subscribe({
+    next: (res: any) => {
+      this.movies = res.results;
+      console.log('Search results:', this.movies);
+    },
+    error: (err) => console.error('Search failed:', err)
+  });
+}
 }

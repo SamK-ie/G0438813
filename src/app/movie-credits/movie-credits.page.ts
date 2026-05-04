@@ -49,6 +49,7 @@ import {
   ],
 })
 export class MovieCreditsPage implements OnInit {
+  isHistoryMode: boolean = false;
   constructor() {}
 
   ngOnInit() {}
