@@ -15,6 +15,7 @@ import {
   videocamOffOutline,
   trendingUpOutline,
   timeOutline,
+  person,
 } from 'ionicons/icons';
 import {
   IonContent,
@@ -91,6 +92,7 @@ export class MovieDetailsPage implements OnInit {
       videocamOffOutline,
       trendingUpOutline,
       timeOutline,
+      person,
     });
   }
 

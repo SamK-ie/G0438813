@@ -15,6 +15,7 @@ import {
   searchOutline,
   trendingUpOutline,
   timeOutline,
+  person,
 } from 'ionicons/icons';
 import {
   IonBadge,
@@ -94,6 +95,7 @@ export class CastCrewDetailsPage implements OnInit {
       searchOutline,
       trendingUpOutline,
       timeOutline,
+      person,
     });
   }
 

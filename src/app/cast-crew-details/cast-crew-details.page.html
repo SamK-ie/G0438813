@@ -17,80 +17,94 @@
         <ion-icon name="videocam" class="videocam-icon"></ion-icon>
       </ion-button>
       <ion-button (click)="openHistory()" class="star-button">
-  <ion-icon name="star" class="star-icon"></ion-icon>
-</ion-button>
+        <ion-icon name="star" class="star-icon"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-searchbar 
-    [(ngModel)]="searchQuery" 
-    name="searchQuery"
-    (ionInput)="onSearch()" 
+  <ion-searchbar [(ngModel)]="searchQuery" name="searchQuery" (ionInput)="onSearch()"
     placeholder="Search cast & crew...">
   </ion-searchbar>
 
   <!-- Recently Viewed People Grid -->
   <div *ngIf="isSearchMode && !searchQuery">
-    <h3 class="section-subtitle">Recently Viewed People</h3>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="4" *ngFor="let p of recentPeople">
-          <div class="credit-grid-item" (click)="loadPerson(p.id)">
-            <div class="credit-avatar-circle">
-              <img [src]="p.profile_path ? 'https://image.tmdb.org/t/p/w185' + p.profile_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-            </div>
-            <p class="credit-label-name">{{ p.name }}</p>
+  <ion-grid class="recent-people-grid">
+   <ion-row>
+      <ion-col size="4" *ngFor="let p of recentPeople">
+        <div class="credit-grid-item" (click)="loadPerson(p.id)">
+          <div class="credit-avatar-circle">
+            
+          
+            <ng-container *ngIf="p.profile_path; else noImage">
+              <img [src]="'https://image.tmdb.org/t/p/w185' + p.profile_path" />
+            </ng-container>
+
+            <ng-template #noImage>
+              <!-- custom placeholder code -->
+              <ion-icon name="person" class="silhouette-icon"></ion-icon>
+              <span class="required-text">No image</span>
+            </ng-template>
+           
+
           </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
+          <p class="credit-label-name">{{ p.name }}</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
 
   <!-- Search Results List -->
   <div *ngIf="!isSearchMode && !searchQuery && person" class="person-container">
-  <!-- Profile Header Section -->
-  <div class="profile-header ion-padding-vertical">
-    <div class="image-wrapper">
-      <img [src]="'https://image.tmdb.org/t/p/w500' + person.profile_path" class="profile-poster" />
-    </div>
-    <h1 class="ion-text-center person-name">{{ person.name }}</h1>
-    
-    <ion-badge color="primary" mode="ios" *ngIf="person.known_for_department">
-      {{ person.known_for_department }}
-    </ion-badge>
-  </div>
+    <!-- Profile Header Section -->
+    <div class="profile-header ion-padding-vertical">
+     <div class="image-wrapper">
+ <div class="profile-image-main">
+  <img *ngIf="person.profile_path" [src]="'https://image.tmdb.org/t/p/w500' + person.profile_path" />
 
-  <!-- Details Section -->
-  <div class="bio-section">
-  <h2 class="section-title">Biography</h2>
-  
-  <div [class.collapsed-bio]="!isBioExpanded" class="bio-content">
-    <p *ngFor="let paragraph of getFormattedBio(person.biography)" class="bio-paragraph">
-      {{ paragraph }}
-    </p>
-  </div>
-
-  <ion-button fill="clear" (click)="toggleBio()">
-    {{ isBioExpanded ? 'Show Less' : 'Read Full Bio' }}
-  </ion-button>
+  <ng-container *ngIf="!person.profile_path">
+    <!-- Icon Layer -->
+    <ion-icon name="person" class="silhouette-icon"></ion-icon>
+    <!-- Text Layer -->
+    <span class="required-text">No image</span>
+  </ng-container>
 </div>
+</div>
+      <h1 class="ion-text-center person-name">{{ person.name }}</h1>
 
-  <!-- Filmography Section -->
-  <div class="filmography-section ion-padding-bottom">
-    <h2 class="section-title ion-padding-horizontal">Known For</h2>
-    <div class="cast-scroll-wrapper">
-      <div class="cast-card" *ngFor="let movie of videography" [routerLink]="['/movie-details', movie.id]">
-        <div class="poster-container">
-          <img [src]="movie.poster_path ? 'https://image.tmdb.org/t/p/w185' + movie.poster_path : 'assets/no-poster.png'" />
-        </div>
-        <div class="movie-info">
-          <p class="movie-title">{{ movie.title }}</p>
-          <p class="movie-year" *ngIf="movie.release_date">{{ movie.release_date | date:'yyyy' }}</p>
+      <ion-badge color="primary" mode="ios" *ngIf="person.known_for_department">
+        {{ person.known_for_department }}
+      </ion-badge>
+    </div>
+
+    <!-- Details Section -->
+    <div class="bio-section">
+      <h2 class="section-title">Biography</h2>
+
+      <div [class.collapsed-bio]="!isBioExpanded" class="bio-content">
+        <p *ngFor="let paragraph of getFormattedBio(person.biography)" class="bio-paragraph">
+          {{ paragraph }}
+        </p>
+      </div>
+
+      <ion-button fill="clear" (click)="toggleBio()">
+        {{ isBioExpanded ? 'Show Less' : 'Read Full Bio' }}
+      </ion-button>
+    </div>
+
+    <!-- Filmography Section -->
+    <div class="filmography-section ion-padding-bottom">
+      <h2 class="section-title ion-padding-horizontal">Known For</h2>
+      <div class="cast-scroll-wrapper">
+        <div class="film-item" *ngFor="let movie of videography" [routerLink]="['/movie-details', movie.id]">
+          <img [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path"
+            onerror="this.src='assets/no-poster.png'" />
+          <p class="movie-title-text">{{ movie.title }}</p>
+          <span class="year-text" *ngIf="movie.release_date">{{ movie.release_date | date:'yyyy' }}</span>
         </div>
       </div>
     </div>
   </div>
-</div>
 </ion-content>

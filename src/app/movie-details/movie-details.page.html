@@ -16,8 +16,8 @@
         <ion-icon name="videocam" class="videocam-icon"></ion-icon>
       </ion-button>
       <ion-button (click)="openHistory()">
-  <ion-icon name="star" class="star-icon"></ion-icon>
-</ion-button>
+        <ion-icon name="star" class="star-icon"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -34,11 +34,11 @@
   </div>
 
   <!-- MODE A: Movie Details -->
-   <div class="ion-padding">
-  <div *ngIf="!isHistoryMode && movie">
-    <div class="poster-container">
-      <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" class="main-poster" />
-    </div>
+  <div class="ion-padding">
+    <div *ngIf="!isHistoryMode && movie">
+      <div class="poster-container">
+        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" class="main-poster" />
+      </div>
 
       <!-- Trending Rank -->
       <ion-badge color="warning" class="trending-badge">
@@ -56,27 +56,41 @@
       <div class="cast-scroll-wrapper">
         <!-- Use the loop directly on the card for horizontal behavior -->
         <div class="cast-card" *ngFor="let castMember of cast" (click)="goToCredits(castMember.id)">
-    <div class="avatar-circle">
-      <img [src]="castMember.profile_path ? 'https://image.tmdb.org/t/p/w185' + castMember.profile_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-    </div>
-    <p class="main-text">{{ castMember.name }}</p>
-    <p class="sub-text">{{ castMember.character }}</p>
-  </div>
-</div>
+          <div class="avatar-circle">
+            <img *ngIf="castMember.profile_path" [src]="'https://image.tmdb.org/t/p/w185' + castMember.profile_path" />
+
+            <div *ngIf="!castMember.profile_path" class="no-image-placeholder">
+              <ion-icon name="person"></ion-icon>
+              <span class="required-text">No image</span>
+            </div>
+          </div>
+          <p class="main-text">{{ castMember.name }}</p>
+          <p class="sub-text">{{ castMember.character }}</p>
+        </div>
+      </div>
 
       <hr class="divider" />
 
       <!-- PRODUCTION CREW SECTION -->
       <h3 class="section-header">Production Crew</h3>
       <div class="cast-scroll-wrapper">
-     <div class="cast-card" *ngFor="let member of crew" (click)="goToCredits(member.id)">
-    <div class="avatar-circle">
-      <img [src]="member.profile_path ? 'https://image.tmdb.org/t/p/w185' + member.profile_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-    </div>
-    <p class="main-text">{{ member.name }}</p>
-    <p class="sub-text">{{ member.job }}</p>
-  </div>
-</div>
+        <div class="cast-card" *ngFor="let member of crew" (click)="goToCredits(member.id)">
+          <div class="avatar-circle">
+            <!-- 1. Show image if it exists -->
+            <img *ngIf="member.profile_path" [src]="'https://image.tmdb.org/t/p/w185' + member.profile_path" />
+
+            <!-- 2. Show placeholder + 'No image' text if missing -->
+            <div *ngIf="!member.profile_path" class="no-image-placeholder">
+              <ion-icon name="person"></ion-icon>
+              <span class="required-text">No image</span>
+            </div>
+          </div>
+
+          <p class="main-text">{{ member.name }}</p>
+          <p class="sub-text">{{ member.job }}</p>
+
+        </div>
+      </div>
     </div>
   </div>
 
