@@ -1,3 +1,4 @@
+import { NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -85,6 +86,7 @@ export class CastCrewDetailsPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private movieService: MovieService,
+    private navCtrl: NavController,
   ) {
     addIcons({
       home,
@@ -105,19 +107,18 @@ export class CastCrewDetailsPage implements OnInit {
   this.loadRecentPeople();
 }
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-  if (!id || id === 'null') {
-    // ICON CLICKED: Show Recently Viewed Grid
-    this.isSearchMode = true;
-    this.person = null; 
-    this.loadRecentPeople(); 
-  } else {
-    // ITEM CLICKED: Show Biography/Information
-    this.isSearchMode = false;
-    this.loadPerson(id); 
-  }
-  }
+ ngOnInit() {
+  this.route.params.subscribe(params => {
+    const id = params['id'];
+    if (!id || id === 'null') {
+      this.isSearchMode = true;
+      this.person = null; 
+      this.loadRecentPeople(); 
+    } else {
+      this.loadPerson(id); 
+    }
+  });
+}
 
   getFormattedBio(bio: string) {
     if (!bio) return [];
@@ -146,6 +147,38 @@ export class CastCrewDetailsPage implements OnInit {
       this.searchResults = res.results; // Returns both Cast and Crew
     });
   }
+
+  searchMulti(event?: Event) {
+  if (event) event.preventDefault();
+
+  const searchText = this.searchQuery.trim();
+  if (!searchText) return;
+
+  this.movieService.searchMulti(searchText).subscribe({
+    next: (res: any) => {
+      if (res.results && res.results.length > 0) {
+        const topResult = res.results[0];
+
+        if (topResult.media_type === 'movie') {
+          // Navigating instead of just loading details keeps the URL in sync
+          this.navCtrl.navigateForward(['/movie-details', topResult.id]);
+          this.isHistoryMode = false;
+        } 
+        else if (topResult.media_type === 'person') {
+          this.navCtrl.navigateForward(['/person-details', topResult.id]);
+        }
+
+        this.searchQuery = ''; 
+      } else {
+        console.log("No results found for this database entry.");
+      }
+    },
+    error: (err: any) => {
+      console.error("Database connection failed:", err);
+      // Optional: Add a Toast or Alert here for the user
+    }
+  });
+}
 
   loadPerson(id: any) {
     this.movieService.getPersonDetails(id).subscribe((res: any) => {
@@ -178,5 +211,14 @@ export class CastCrewDetailsPage implements OnInit {
     this.recentPeople = history;
   }
 
+  clearHistory() {
+  // 1. Wipe the local variable so the screen updates instantly
+  this.recentPeople = [];
+
+  // 2. Wipe the storage so it stays empty when you reload the app
+  localStorage.removeItem('recentPeople');
+  
+  console.log('History cleared!');
+}
   
 }

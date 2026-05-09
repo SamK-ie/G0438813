@@ -15,24 +15,22 @@
         <ion-icon name="videocam" class="videocam-icon"></ion-icon>
       </ion-button>
       <ion-button (click)="openHistory()">
-  <ion-icon name="star" class="star-icon"></ion-icon>
-</ion-button>
+        <ion-icon name="star" class="star-icon"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
+  
   <div class="search-section ion-padding">
-    <h2 class="search-title">Search Movie</h2>
-
+    <h2 class="search-title">Welcome to the Movie App</h2>
     <form (submit)="onSearch($event)">
       <ion-item line="none" class="custom-input-item">
-        <ion-input [(ngModel)]="searchQuery" name="searchQuery" placeholder="Enter movie name" clearInput="true"
-          ngDefaultControl>
+        <ion-input [(ngModel)]="searchQuery" name="searchQuery" placeholder="Search for a movie by name..." clearInput="true" ngDefaultControl>
         </ion-input>
       </ion-item>
-
-      <ion-button expand="full" type="submit">SEARCH</ion-button>
+      <ion-button expand="full" type="submit" class="search-btn">SEARCH</ion-button>
     </form>
   </div>
 
@@ -47,32 +45,37 @@
   </div>
 
   <ion-list-header>
-    <ion-label>{{ listTitle }}</ion-label>
+    <ion-label class="section-header">{{ listTitle }}</ion-label>
   </ion-list-header>
 
-  <ion-list *ngIf="movies.length > 0">
-    <ion-item *ngFor="let movie of movies" [routerLink]="['/movie-details', movie.id]">
-      <ion-thumbnail slot="start">
-        <img
-          [src]="movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ movie.title }}</h2>
-        <p>{{ movie.release_date | date:'yyyy' }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-grid class="movie-grid" *ngIf="movies.length > 0">
+    <ion-row>
+      <ion-col size="4" *ngFor="let movie of movies" [routerLink]="['/movie-details', movie.id]">
+        <div class="grid-poster-frame">
+          <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path" />
+          <div *ngIf="!movie.poster_path" class="grid-no-image">
+            <ion-icon name="videocam"></ion-icon>
+            <span>No Poster</span>
+          </div>
+        </div>
+        <p class="main-text">{{ movie.title }}</p>
+        <p class="sub-text" *ngIf="movie.release_date">{{ movie.release_date | date:'yyyy' }}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <div *ngIf="movies.length === 0 && searchQuery !== ''" class="ion-text-center ion-padding">
-    <ion-icon name="search-outline" style="font-size: 64px; color: var(--ion-color-step-400);"></ion-icon>
-    <p>No movies found matching "{{ searchQuery }}".</p>
-    <ion-button fill="clear" (click)="searchQuery = ''; loadTrending()">View Trending</ion-button>
-  </div>
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more movies...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
-  <!-- Case 3: Initial Empty State (Optional if Trending is loaded) -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showBackToTop">
+    <ion-fab-button color="warning" (click)="scrollToTop()" size="small">
+      <ion-icon name="arrow-up"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <div *ngIf="movies.length === 0 && searchQuery === ''" class="ion-text-center ion-padding">
-    <ion-icon name="film-outline" style="font-size: 64px; color: var(--ion-color-step-400);"></ion-icon>
-    <p>Loading trending movies...</p>
+    <p>Loading movies...</p>
   </div>
-
 </ion-content>

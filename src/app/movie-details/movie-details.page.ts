@@ -1,5 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { MovieService } from '../services/movie.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,8 +19,12 @@ import {
   trendingUpOutline,
   timeOutline,
   person,
+  searchOutline,
 } from 'ionicons/icons';
 import {
+  IonGrid,
+  IonRow,
+  IonCol,
   IonContent,
   IonHeader,
   IonTitle,
@@ -69,6 +76,9 @@ import {
     IonListHeader,
     IonBadge,
     IonAvatar,
+    IonGrid,
+    IonRow,
+    IonCol,
   ],
 })
 export class MovieDetailsPage implements OnInit {
@@ -83,6 +93,8 @@ export class MovieDetailsPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private movieService: MovieService,
+    private http: HttpClient,
+    private navCtrl: NavController,
   ) {
     addIcons({
       home,
@@ -93,6 +105,7 @@ export class MovieDetailsPage implements OnInit {
       trendingUpOutline,
       timeOutline,
       person,
+      searchOutline,
     });
   }
 
@@ -137,8 +150,9 @@ export class MovieDetailsPage implements OnInit {
   }
 
   loadDetails(id: number) {
-    this.movieService.getMovieDetails(id).subscribe((res: any) => {
-      this.movie = res;
+  this.isHistoryMode = false; // Hide history grid when a movie is loaded
+  this.movieService.getMovieDetails(id).subscribe((res: any) => {
+    this.movie = res;
 
       let history = JSON.parse(
         localStorage.getItem('recentlyViewedMovies') || '[]',
@@ -201,6 +215,38 @@ export class MovieDetailsPage implements OnInit {
     });
   }
 
+searchMulti(event?: Event) {
+  if (event) event.preventDefault();
+
+  const searchText = this.searchQuery.trim();
+  if (!searchText) return;
+
+  this.movieService.searchMulti(searchText).subscribe({
+    next: (res: any) => {
+      if (res.results && res.results.length > 0) {
+        const topResult = res.results[0];
+
+        if (topResult.media_type === 'movie') {
+          // Navigating instead of just loading details keeps the URL in sync
+          this.navCtrl.navigateForward(['/movie-details', topResult.id]);
+          this.isHistoryMode = false;
+        } 
+        else if (topResult.media_type === 'person') {
+          this.navCtrl.navigateForward(['/person-details', topResult.id]);
+        }
+
+        this.searchQuery = ''; 
+      } else {
+        console.log("No results found for this database entry.");
+      }
+    },
+    error: (err: any) => {
+      console.error("Database connection failed:", err);
+      // Optional: Add a Toast or Alert here for the user
+    }
+  });
+}
+
   // Helper to keep logic clean
   addToHistory(term: string) {
     this.recentlyViewedMovies.unshift(term); // Assuming recentlyViewedMovies is your list[cite: 8]
@@ -213,4 +259,14 @@ export class MovieDetailsPage implements OnInit {
       JSON.stringify(this.recentlyViewedMovies),
     );
   }
+
+  clearHistory() {
+  // 1. Wipe the local variable so the screen updates instantly
+  this.recentlyViewedMovies = [];
+
+  // 2. Wipe the storage so it stays empty when you reload the app
+  localStorage.removeItem('recentlyViewedMovies');
+  
+  console.log('History cleared!');
+}
 }
