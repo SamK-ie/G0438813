@@ -273,6 +273,8 @@ h3 {
 }
 .collapsed-bio {
   max-height: 150px !important;
+  overflow: hidden;
+  position: relative;
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
@@ -286,8 +288,12 @@ h3 {
 .bio-toggle-gold {
   color: var(--app-gold);
   font-weight: bold;
+  padding: 10px 0;
   cursor: pointer;
-  padding-left: 16px;
+  text-transform: uppercase;
+  display: inline-block;
+  z-index: 10;
+  position: relative;
 }
 
 /* --- 10. FAVORITES--- */
@@ -361,7 +367,7 @@ h3 {
 
   .hero-poster {
     /* Significantly larger: roughly half the screen width */
-    width: 50% !important; 
+    width: 50% !important;
     min-width: 160px;
     max-width: 220px;
     aspect-ratio: 2 / 3 !important;
@@ -388,7 +394,7 @@ h3 {
 
     .hero-subtitle {
       margin: 2px 0 0 0;
-      font-size: .85rem;
+      font-size: 0.85rem;
       color: var(--ion-color-medium);
       font-weight: 400;
       font-style: italic;
@@ -402,4 +408,25 @@ h3 {
     font-weight: 800;
     letter-spacing: 1px;
   }
+}
+
+/* --- 13. MOBILE HEADER CONTROLS --- */
+
+ion-header {
+  display: block !important;
+  position: relative !important;
+  z-index: 100;
+}
+
+.search-container {
+  width: 100%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+}
+
+.custom-searchbar {
+  --background: #333;
+  --color: white;
+  --icon-color: var(--app-gold);
 }

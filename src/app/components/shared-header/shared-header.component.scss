@@ -1,0 +1,13 @@
+ion-header {
+    padding-top: var(--ion-safe-area-top) !important;
+  background-color: var(--ion-background-color, #000); 
+  
+  ion-toolbar {
+    --background: transparent;
+    --border-style: none;
+  }
+}
+
+.search-container {
+  padding: 0 8px 8px 8px;
+}

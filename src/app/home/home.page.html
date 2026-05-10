@@ -1,11 +1,11 @@
 <app-shared-header [showSearch]="false" [pageTitle]="'G0438813'"></app-shared-header>
 
-<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
+<ion-content [fullscreen]="false" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
   
   <div class="search-section ion-padding">
     <h2 class="search-title">Welcome to the Movie App</h2>
     <form (submit)="onSearch($event)">
-      <ion-item line="none" class="custom-input-item">
+      <ion-item lines="none" class="custom-input-item">
         <ion-input [(ngModel)]="searchQuery" name="searchQuery" placeholder="Search for a movie by name..." clearInput="true" ngDefaultControl>
         </ion-input>
       </ion-item>
@@ -24,28 +24,22 @@
   </div>
 
   <div class="section-header">
-  <h2>{{ listTitle }}</h2>
-</div>
+    <h2>{{ listTitle }}</h2>
+  </div>
 
   <ion-grid class="movie-grid" *ngIf="movies.length > 0">
     <ion-row>
       <ion-col size="4" *ngFor="let movie of movies" [routerLink]="['/movie-details', movie.id]">
         <div class="grid-poster-frame">
           <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path" />
-          <div *ngIf="!movie.poster_path" class="grid-no-image">
-            <ion-icon name="videocam"></ion-icon>
-            <span>No Poster</span>
-          </div>
         </div>
         <p class="main-text">{{ movie.title }}</p>
-        <p class="sub-text" *ngIf="movie.release_date">{{ movie.release_date | date:'yyyy' }}</p>
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <ion-infinite-scroll (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more movies...">
-    </ion-infinite-scroll-content>
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more movies..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showBackToTop">
@@ -53,8 +47,4 @@
       <ion-icon name="arrow-up"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <div *ngIf="movies.length === 0 && searchQuery === ''" class="ion-text-center ion-padding">
-    <p>Loading movies...</p>
-  </div>
 </ion-content>
