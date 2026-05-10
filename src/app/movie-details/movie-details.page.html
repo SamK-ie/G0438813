@@ -36,6 +36,7 @@
     <p class="bio-paragraph">{{ movie.overview }}</p>
 
     <h2 class="section-header">Top Cast</h2>
+    <ion-button fill="clear" color="warning" [routerLink]="['/full-credits', movie.id, 'movie']">See All</ion-button>
     <div class="cast-scroll-wrapper">
       <div class="cast-card" *ngFor="let castMember of cast" (click)="goToCredits(castMember.id)">
         <div class="portrait-frame">
@@ -56,6 +57,7 @@
     </div>
 
     <h2 class="section-header">Production Crew</h2>
+    <ion-button fill="clear" color="warning" [routerLink]="['/full-credits', movie.id, 'movie']">See All</ion-button>
     <div class="cast-scroll-wrapper">
       <div class="cast-card" *ngFor="let member of crew" (click)="goToCredits(member.id)">
         <div class="portrait-frame">

@@ -20,15 +20,10 @@ import {
   IonRow,
   IonCol,
   IonContent,
-  IonItem,
-  IonLabel,
-  IonList,
   IonButton,
   IonIcon,
-  IonChip,
   IonListHeader,
   IonBadge,
-  IonSearchbar,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -41,20 +36,15 @@ import {
     IonContent,
     IonButton,
     IonIcon,
-    IonItem,
-    IonLabel,
-    IonList,
     CommonModule,
     FormsModule,
     RouterLink,
     RouterModule,
-    IonChip,
     IonListHeader,
     IonBadge,
     IonGrid,
     IonRow,
     IonCol,
-    IonSearchbar,
   ],
 })
 export class MovieDetailsPage implements OnInit {
@@ -83,18 +73,21 @@ export class MovieDetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe(params => {
+    const id = params['id'];
+    
     if (!id || id === 'null') {
       this.isHistoryMode = true;
       this.loadHistory();
+      this.movie = null;
     } else {
       this.isHistoryMode = false;
       this.loadDetails(Number(id));
       this.getCast(id);
     }
-  }
+  });
+}
 
-  // ... rest of the logic remains exactly as you had it
   isFavorite(id: number, type: 'movie' | 'cast'): boolean {
     const key = type === 'movie' ? 'fav_movies' : 'fav_cast';
     const list = JSON.parse(localStorage.getItem(key) || '[]');
@@ -129,14 +122,17 @@ export class MovieDetailsPage implements OnInit {
     });
   }
 
-  getCast(id: string | number) {
-    this.movieService.getMovieCredits(id).subscribe((res: any) => {
+ getCast(id: any) {
+  this.movieService.getMovieCredits(id).subscribe({
+    next: (res: any) => {
       this.cast = res.cast.slice(0, 15);
-      this.crew = res.crew
-        .filter((m: any) => ['Director', 'Producer', 'Writer', 'Screenplay'].includes(m.job))
-        .slice(0, 10);
-    });
-  }
+      this.crew = res.crew.filter((m: any) => 
+        ['Director', 'Producer', 'Writer', 'Screenplay'].includes(m.job)
+      ).slice(0, 10);
+    },
+    error: (err) => console.error('Fetch error:', err)
+  });
+}
 
   loadHistory() {
     const saved = localStorage.getItem('recentlyViewedMovies');

@@ -32,7 +32,7 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'full-credits',
+    path: 'full-credits/:id/:type',
     loadComponent: () => import('./full-credits/full-credits.page').then( m => m.FullCreditsPage)
   },
 ];

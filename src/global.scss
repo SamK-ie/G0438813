@@ -75,34 +75,34 @@ h1 {
   }
 }
 
-  .glass-banner {
-    margin: 25px 16px !important;
-    padding: 20px;
-    border-radius: 15px;
-    background: var(--ion-color-step-100);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--ion-color-step-200);
+.glass-banner {
+  margin: 25px 16px !important;
+  padding: 20px;
+  border-radius: 15px;
+  background: var(--ion-color-step-100);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--ion-color-step-200);
 
-    .banner-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 15px;
+  .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
 
-      .gold-icon {
-        font-size: 1.5rem;
-        color: var(--app-gold);
-      }
-      p {
-        margin: 0;
-        color: var(--ion-color-step-600);
-        font-size: 0.9rem;
-        font-style: italic;
-      }
+    .gold-icon {
+      font-size: 1.5rem;
+      color: var(--app-gold);
+    }
+    p {
+      margin: 0;
+      color: var(--ion-color-step-600);
+      font-size: 0.9rem;
+      font-style: italic;
     }
   }
+}
 
 /* --- 4. FRAMES & OVERLAYS --- */
 .portrait-frame,
@@ -341,4 +341,65 @@ h3 {
 .cast-card {
   flex: 0 0 100px !important;
   width: 100px !important;
+}
+
+/* --- 12. FULL CREDITS STYLING --- */
+
+.hero-container {
+  padding: 30px 0 20px 0;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to bottom, var(--ion-color-step-50), transparent);
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .hero-poster {
+    /* Significantly larger: roughly half the screen width */
+    width: 50% !important; 
+    min-width: 160px;
+    max-width: 220px;
+    aspect-ratio: 2 / 3 !important;
+    margin-bottom: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .hero-text {
+    text-align: center;
+    margin-bottom: 10px;
+
+    .hero-title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ion-text-color);
+    }
+
+    .hero-subtitle {
+      margin: 2px 0 0 0;
+      font-size: .85rem;
+      color: var(--ion-color-medium);
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
+
+  .hero-btn {
+    --width: 140px;
+    --height: 40px;
+    margin: 0 auto;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
 }

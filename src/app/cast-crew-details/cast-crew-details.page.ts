@@ -18,20 +18,13 @@ import {
 } from 'ionicons/icons';
 import {
   IonBadge,
-  IonAvatar,
   IonContent,
   IonButton,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonList,
   IonListHeader,
-  IonThumbnail,
   IonGrid,
   IonRow,
   IonCol,
-  IonSearchbar,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -42,7 +35,6 @@ import {
   imports: [
     SharedHeaderComponent,
     IonBadge,
-    IonAvatar,
     IonContent,
     CommonModule,
     FormsModule,
@@ -50,16 +42,10 @@ import {
     RouterLink,
     IonButton,
     IonIcon,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonList,
     IonListHeader,
-    IonThumbnail,
     IonGrid,
     IonRow,
     IonCol,
-    IonSearchbar,
   ],
 })
 export class CastCrewDetailsPage implements OnInit {
