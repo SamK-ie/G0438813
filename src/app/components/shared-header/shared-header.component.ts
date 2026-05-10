@@ -2,10 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { addIcons } from 'ionicons';
 import {
   chevronBack,
@@ -15,8 +14,9 @@ import {
   star,
   searchOutline,
   search,
-} from 'ionicons/icons'; // Added the missing 'from' and closing semicolon
-import { from } from 'rxjs';
+  person, 
+  list    
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-shared-header',
@@ -44,6 +44,8 @@ export class SharedHeaderComponent implements OnInit {
       videocam,
       home,
       star,
+      person, 
+      list    
     });
   }
 
@@ -74,7 +76,6 @@ export class SharedHeaderComponent implements OnInit {
       this.headerIcon = 'star';
     }
   }
-}
 
   searchMulti(event?: Event) {
     if (event) event.preventDefault();
