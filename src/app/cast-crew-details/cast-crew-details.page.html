@@ -139,12 +139,16 @@
     </div>
 
     <div class="filmography-section" *ngIf="videography.length > 0">
-      <div class="section-header">
-        <h2>Known For</h2>
-        <ion-button fill="clear" color="warning" [routerLink]="['/full-credits', person.id, 'person']">See All</ion-button>
-      </div>
+  <div class="section-header-container">
+    <div class="section-header">
+      <h2>Known For</h2>
+    </div>
+    <ion-button fill="clear" color="warning" [routerLink]="['/full-credits', person.id, 'person']">
+      See All
+    </ion-button>
+  </div>
       <div class="cast-scroll-wrapper">
-        <div class="cast-card" *ngFor="let movie of videography" [routerLink]="['/full-credits', person.id, 'person']">
+        <div class="cast-card" *ngFor="let movie of videography" [routerLink]="['/movie-details', movie.id]">
           <div class="portrait-frame">
             <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path" />
             <div class="heart-overlay" (click)="toggleFav(movie, 'movie'); $event.stopPropagation()">

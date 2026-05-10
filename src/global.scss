@@ -421,17 +421,17 @@ html, body {
 }
 
 ion-header {
-  display: block !important;
-  position: sticky !important;
-  top: 0;
-  z-index: 1000 !important;
   background: var(--ion-background-color);
 
   ion-toolbar {
     --background: var(--ion-toolbar-background, var(--ion-background-color));
+    --border-style: none;
     --color: var(--ion-toolbar-color, var(--ion-text-color));
-    --padding-top: var(--ion-safe-area-top, 0);
   }
+}
+.main-nav-toolbar {
+  --padding-top: 5px;
+  --padding-bottom: 5px;
 }
 
 ion-back-button {
@@ -441,9 +441,8 @@ ion-back-button {
 }
 
 ion-content {
-  --offset-bottom: 0px !important;
-  --offset-top: 0px !important;
-  --padding-bottom: env(safe-area-inset-bottom);
+  --offset-top: 10px;
+  --padding-bottom: 20px;
 }
 
 .section-header-container {
