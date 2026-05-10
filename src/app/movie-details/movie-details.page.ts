@@ -62,7 +62,7 @@ export class MovieDetailsPage implements OnInit {
     private http: HttpClient,
     private navCtrl: NavController,
   ) {
-    // 4. Only keep icons used in the page body
+ 
     addIcons({
       heart,
       heartOutline,
@@ -87,6 +87,7 @@ export class MovieDetailsPage implements OnInit {
     }
   });
 }
+
 
   isFavorite(id: number, type: 'movie' | 'cast'): boolean {
     const key = type === 'movie' ? 'fav_movies' : 'fav_cast';
