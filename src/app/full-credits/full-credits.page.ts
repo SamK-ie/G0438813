@@ -27,7 +27,7 @@ import {
   IonSegmentButton,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-full-credits',

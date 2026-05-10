@@ -26,7 +26,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonGrid,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-favourites',

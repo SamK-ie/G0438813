@@ -31,7 +31,7 @@ import {
   IonInfiniteScrollContent,
   IonFab,
   IonFabButton,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-home',

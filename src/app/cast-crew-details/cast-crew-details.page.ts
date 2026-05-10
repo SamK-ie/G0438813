@@ -25,7 +25,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-cast-crew-details',

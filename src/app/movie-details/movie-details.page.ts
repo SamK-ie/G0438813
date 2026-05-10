@@ -25,7 +25,7 @@ import {
   IonIcon,
   IonListHeader,
   IonBadge,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-movie-details',
