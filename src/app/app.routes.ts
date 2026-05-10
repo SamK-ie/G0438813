@@ -31,4 +31,8 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'full-credits',
+    loadComponent: () => import('./full-credits/full-credits.page').then( m => m.FullCreditsPage)
+  },
 ];

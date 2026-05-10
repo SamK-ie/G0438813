@@ -10,7 +10,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/* Ionic Dark Mode */
+/* Ionic Dark Mode Palettes */
 @import "@ionic/angular/css/palettes/dark.always.css";
 @import "@ionic/angular/css/palettes/dark.class.css";
 @import "@ionic/angular/css/palettes/dark.system.css";
@@ -22,21 +22,20 @@
 .heart-icon {
   color: var(--ion-color-danger) !important;
 }
-.videocam-icon {
-  color: #c0c0c0 !important;
+.videoCam-icon {
+  color: var(--ion-color-medium) !important;
 }
 .star-icon {
-  color: #ffd700 !important;
+  color: var(--app-gold) !important;
 }
 .search-icon {
-  color: #ffffff !important;
+  color: var(--ion-text-color) !important;
 }
 
-/* --- 2. MAIN MOVIE DETAILS (BIG POSTER) --- */
+/* --- 2. LAYOUT & TITLES --- */
 .poster-container {
   display: flex !important;
   justify-content: center !important;
-  align-items: center !important;
   padding: 30px 0 !important;
   width: 100% !important;
 
@@ -44,7 +43,7 @@
     width: 85% !important;
     max-width: 340px !important;
     border-radius: 20px !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
     display: block !important;
     margin: 0 auto !important;
   }
@@ -54,85 +53,95 @@
 h1 {
   font-size: 2.2rem !important;
   font-weight: 900;
-  color: white;
+  color: var(--ion-text-color);
   margin: 10px 16px !important;
   line-height: 1.1;
   text-align: center !important;
 }
 
-/* --- 3. RECENTLY VIEWED & HISTORY GRID --- */
+/* --- 3. RECENTLY VIEWED & HISTORY --- */
 .history-view {
-  background: #000 !important;
-  min-height: 100%;
-
-  .glass-banner {
-    margin: 16px;
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-
-    .banner-content {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      .gold-icon {
-        font-size: 28px;
-        color: #ffd700;
-      }
-      p {
-        margin: 0;
-        color: #e0e0e0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        font-weight: 300;
-        font-style: italic;
-      }
-    }
-  }
+  background: var(--ion-background-color) !important;
+  min-height: 100vh;
 
   .movie-grid {
-    padding: 5px !important;
+    padding: 10px !important;
     ion-col {
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       text-align: center !important;
-      padding: 4px !important;
     }
   }
 }
 
-/* --- 4. RECTANGULAR PORTRAIT FRAMES --- */
+  .glass-banner {
+    margin: 25px 16px !important;
+    padding: 20px;
+    border-radius: 15px;
+    background: var(--ion-color-step-100);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--ion-color-step-200);
+
+    .banner-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 15px;
+
+      .gold-icon {
+        font-size: 1.5rem;
+        color: var(--app-gold);
+      }
+      p {
+        margin: 0;
+        color: var(--ion-color-step-600);
+        font-size: 0.9rem;
+        font-style: italic;
+      }
+    }
+  }
+
+/* --- 4. FRAMES & OVERLAYS --- */
 .portrait-frame,
 .grid-poster-frame {
   width: 100% !important;
   aspect-ratio: 2 / 3 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
-  background: #1a1a1a !important;
+  background: var(--ion-color-step-150) !important;
   position: relative !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  container-type: size; /* Crucial for No Image text scaling */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 
   img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    display: block !important;
   }
 }
 
-/* Unified No Image Placeholder Logic */
+.heart-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
 .no-image-wrapper,
-.portrait-no-image,
 .grid-no-image {
   width: 100%;
   height: 100%;
@@ -140,32 +149,186 @@ h1 {
   flex-direction: column !important;
   justify-content: center !important;
   align-items: center !important;
-  background: #242424 !important;
+  background: #1a1a1a !important;
 
-  /* Centers silhouette/icon perfectly in the rectangle */
-  .placeholder-silhouette,
   ion-icon {
-    font-size: 45cqw !important;
-    color: rgba(255, 255, 255, 0.15) !important;
-    margin-bottom: 5cqw;
+    font-size: 5rem !important;
+    color: #bcbcbc !important;
+    margin-bottom: 5px;
   }
-
-  /* Centers "No Image" text perfectly */
-  .no-image-text,
   span {
-    font-size: 12cqw !important;
-    color: #888 !important;
+    font-size: 0.8rem !important;
+    color: #8e8e8e !important;
     text-transform: uppercase;
     font-weight: 700;
-    letter-spacing: 1px;
-    font-style: normal !important;
-    text-align: center;
-    padding: 0 5px;
-    width: 100%;
   }
 }
 
-/* --- 5. TEXT & LIST STYLING --- */
+/* --- 5. TEXT STYLES --- */
+.main-text {
+  color: var(--ion-text-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin: 6px 0 2px 0 !important;
+  text-align: center;
+}
+
+.sub-text {
+  color: var(--ion-color-step-600);
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+/* --- 6. SECTIONS --- */
+.section-header {
+  border-left: 4px solid var(--app-gold) !important;
+  padding-left: 12px !important;
+  margin: 25px 0 15px 16px !important;
+}
+
+h2,
+h3 {
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  color: var(--app-gold) !important;
+  letter-spacing: 0.5px;
+}
+
+/* --- 7. BIO & PROFILE --- */
+.badge-center-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.role-badge {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.profile-portrait-main {
+  width: 60% !important;
+  max-width: 220px !important;
+  aspect-ratio: 2 / 3 !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.person-container .profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.person-container .image-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.person-container .profile-portrait-main {
+  margin: 0 auto !important;
+}
+
+/* --- 8. PERSONAL INFO (INLINE) --- */
+.personal-info-container {
+  margin-bottom: 20px;
+
+  .info-content {
+    padding: 0 16px !important;
+    margin-top: 10px;
+  }
+
+  .info-item {
+    font-size: 1rem;
+    margin-bottom: 15px !important;
+    display: block !important;
+    line-height: 1.4;
+
+    span.label {
+      display: inline-block;
+      font-weight: 800 !important;
+      color: var(--ion-text-color) !important;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    span.value {
+      display: inline;
+      font-weight: 400 !important;
+      color: var(--ion-color-step-800) !important;
+    }
+  }
+}
+
+/* --- 9. BIO TOGGLE --- */
+.bio-content {
+  transition: max-height 0.5s ease-in-out;
+  overflow: hidden;
+}
+.collapsed-bio {
+  max-height: 150px !important;
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+.bio-paragraph {
+  padding: 0 16px;
+  line-height: 1.6;
+  font-weight: 400 !important;
+  color: var(--ion-color-step-800);
+  margin-bottom: 15px;
+}
+.bio-toggle-gold {
+  color: var(--app-gold);
+  font-weight: bold;
+  cursor: pointer;
+  padding-left: 16px;
+}
+
+/* --- 10. FAVORITES--- */
+.fav-row-under {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px;
+  margin: 5px auto 25px auto !important;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+  .fav-text {
+    color: var(--ion-color-medium);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  ion-icon {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+  }
+}
+
+.details-btn {
+  --background: var(--app-gold) !important;
+  --color: #000000 !important;
+  --border-radius: 4px;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  margin-top: 10px;
+  height: 32px;
+  text-transform: uppercase;
+}
+
+/* --- 11. HORIZONTAL SCROLLING --- */
 .cast-scroll-wrapper {
   display: flex !important;
   overflow-x: auto !important;
@@ -175,442 +338,7 @@ h1 {
     display: none;
   }
 }
-
 .cast-card {
   flex: 0 0 100px !important;
   width: 100px !important;
-  text-align: center !important;
-}
-
-.main-text {
-  width: 100%;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700; /* Made slightly bolder for the 4-column grid */
-  margin: 6px 0 2px 0 !important;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-align: center;
-}
-
-.sub-text {
-  width: 100%;
-  color: #8c8c8c;
-  font-size: 0.65rem;
-  margin: 0 !important;
-  text-align: center;
-}
-
-/* --- 6. HEADINGS & SECTIONS --- */
-.section-header,
-h2,
-h3 {
-  font-size: 1.3rem !important;
-  font-weight: 800 !important;
-  text-transform: uppercase;
-  color: #ffd700 !important;
-  border-left: 4px solid #ffd700;
-  padding-left: 12px;
-  margin: 25px 0 15px 16px !important;
-}
-
-/* --- 7. HOVER EFFECTS --- */
-.grid-poster-frame:hover,
-.cast-card:hover {
-  filter: brightness(1.2);
-  transition: 0.2s ease;
-}
-
-/* --- 8. BIO & INFO PAGE STYLES --- */
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.image-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-  width: 100%;
-}
-
-.profile-portrait-main {
-  width: 60% !important;
-  max-width: 220px !important;
-  aspect-ratio: 2 / 3 !important;
-  border-radius: 15px !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.person-name-title {
-  text-align: center !important;
-  font-size: 1.8rem !important;
-  font-weight: 900;
-  color: white;
-  margin: 10px 0 5px 0 !important;
-}
-
-.role-badge {
-  display: block !important;
-  margin: 0 auto 20px !important;
-  width: fit-content !important;
-  padding: 8px 16px !important;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.bio-content p,
-.bio-paragraph {
-  padding: 0 16px;
-  line-height: 1.6;
-  color: #ccc;
-  margin-bottom: 15px;
-  font-size: 0.95rem;
-}
-
-/* Core CSS imports */
-@import "@ionic/angular/css/core.css";
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
-
-/* Ionic Dark Mode */
-@import "@ionic/angular/css/palettes/dark.always.css";
-@import "@ionic/angular/css/palettes/dark.class.css";
-@import "@ionic/angular/css/palettes/dark.system.css";
-
-/* --- 1. GLOBAL ICON COLORS --- */
-.home-icon {
-  color: #228b22 !important;
-}
-.heart-icon {
-  color: var(--ion-color-danger) !important;
-}
-.videocam-icon {
-  color: #c0c0c0 !important;
-}
-.star-icon {
-  color: #ffd700 !important;
-}
-.search-icon {
-  color: #ffffff !important;
-}
-
-/* --- 2. MAIN MOVIE DETAILS (BIG POSTER) --- */
-.poster-container {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 30px 0 !important;
-  width: 100% !important;
-
-  .main-poster {
-    width: 85% !important;
-    max-width: 340px !important;
-    border-radius: 20px !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important;
-    display: block !important;
-    margin: 0 auto !important;
-  }
-}
-
-.movie-details-title,
-h1 {
-  font-size: 2.2rem !important;
-  font-weight: 900;
-  color: white;
-  margin: 10px 16px !important;
-  line-height: 1.1;
-  text-align: center !important;
-}
-
-/* --- 3. RECENTLY VIEWED & HISTORY GRID --- */
-.history-view {
-  background: #000 !important;
-  min-height: 100%;
-
-  .glass-banner {
-    margin: 16px;
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-
-    .banner-content {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      .gold-icon {
-        font-size: 28px;
-        color: #ffd700;
-      }
-      p {
-        margin: 0;
-        color: #e0e0e0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        font-weight: 300;
-        font-style: italic;
-      }
-    }
-  }
-
-  .movie-grid {
-    padding: 5px !important;
-    ion-col {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-      padding: 4px !important;
-    }
-  }
-}
-
-/* --- 4. RECTANGULAR PORTRAIT FRAMES --- */
-.portrait-frame,
-.grid-poster-frame {
-  width: 100% !important;
-  aspect-ratio: 2 / 3 !important;
-  border-radius: 12px !important;
-  overflow: hidden !important;
-  background: #1a1a1a !important;
-  position: relative !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  container-type: size; /* Crucial for No Image text scaling */
-  cursor: pointer;
-
-  img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    display: block !important;
-  }
-}
-
-/* Unified No Image Placeholder Logic */
-.no-image-wrapper,
-.portrait-no-image,
-.grid-no-image {
-  width: 100%;
-  height: 100%;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  background: #242424 !important;
-
-  /* Centers silhouette/icon perfectly in the rectangle */
-  .placeholder-silhouette,
-  ion-icon {
-    font-size: 45cqw !important;
-    color: rgba(255, 255, 255, 0.15) !important;
-    margin-bottom: 5cqw;
-  }
-
-  /* Centers "No Image" text perfectly */
-  .no-image-text,
-  span {
-    font-size: 12cqw !important;
-    color: #888 !important;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1px;
-    font-style: normal !important;
-    text-align: center;
-    padding: 0 5px;
-    width: 100%;
-  }
-}
-
-/* --- 5. TEXT & LIST STYLING --- */
-.cast-scroll-wrapper {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important; /* Force items into one row */
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  padding: 0 16px 20px 16px;
-  gap: 15px;
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    height: 6px; /* Horizontal bar height */
-    display: block;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 215, 0, 0.3); /* Subtle gold thumb */
-    border-radius: 10px;
-  }
-
-  @media (pointer: coarse) {
-    &::-webkit-scrollbar {
-      display: none; /* Hide scrollbar on touch devices */
-    }
-  }
-}
-
-.cast-card {
-  flex: 0 0 100px !important;
-  width: 100px !important;
-  text-align: center !important;
-}
-
-.main-text {
-  width: 100%;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700; /* Made slightly bolder for the 4-column grid */
-  margin: 6px 0 2px 0 !important;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-align: center;
-}
-
-.sub-text {
-  width: 100%;
-  color: #8c8c8c;
-  font-size: 0.65rem;
-  margin: 0 !important;
-  text-align: center;
-}
-
-/* --- 6. HEADINGS & SECTIONS --- */
-.section-header,
-h2,
-h3 {
-  font-size: 1.3rem !important;
-  font-weight: 800 !important;
-  text-transform: uppercase;
-  color: #ffd700 !important;
-  border-left: 4px solid #ffd700;
-  padding-left: 12px;
-  margin: 25px 0 15px 16px !important;
-}
-
-/* --- 7. HOVER EFFECTS --- */
-.grid-poster-frame:hover,
-.cast-card:hover {
-  filter: brightness(1.2);
-  transition: 0.2s ease;
-}
-
-/* --- 9. BIO & INFO PAGE STYLES --- */
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.image-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-  width: 100%;
-}
-
-.profile-portrait-main {
-  width: 60% !important;
-  max-width: 220px !important;
-  aspect-ratio: 2 / 3 !important;
-  border-radius: 15px !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.person-name-title {
-  text-align: center !important;
-  font-size: 1.8rem !important;
-  font-weight: 900;
-  color: white;
-  margin: 10px 0 5px 0 !important;
-}
-
-.role-badge {
-  display: block !important;
-  margin: 0 auto 20px !important;
-  width: fit-content !important;
-  padding: 8px 16px !important;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.bio-section {
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-}
-
-.bio-flex-container {
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.bio-content {
-  overflow: hidden;
-  transition: max-height 0.4s ease-in-out;
-  max-height: 5000px;
-  position: relative;
-}
-
-.bio-paragraph {
-  margin: 0 0 12px 0 !important; /* Only bottom margin for spacing */
-  line-height: 1.6;
-  color: #ccc;
-  font-size: 0.95rem;
-}
-
-.collapsed-bio {
-  max-height: 120px;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--ion-background-color) 95%);
-    pointer-events: none;
-  }
-}
-
-.bio-toggle-gold {
-  color: #ffd700 !important; 
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  padding: 10 px 0px;
-  display: block;
-  margin-top: 5px;
-
-  &:active {
-    opacity: 0.7;
-  }
 }

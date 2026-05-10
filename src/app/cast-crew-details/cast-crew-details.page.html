@@ -1,50 +1,24 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      <ion-icon name="star" class="star-icon"></ion-icon>
-      Cast & Crew
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/home">
-        <ion-icon name="home" class="home-icon"></ion-icon>
-      </ion-button>
-      <ion-button routerLink="/favorites">
-        <ion-icon name="heart" class="heart-icon"></ion-icon>
-      </ion-button>
-      <ion-button routerLink="/movie-details/null">
-        <ion-icon name="videocam" class="videocam-icon"></ion-icon>
-      </ion-button>
-      <ion-button (click)="openHistory()" class="star-button">
-        <ion-icon name="star" class="star-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  <ion-toolbar>
-    <div class="search-container">
-      <ion-searchbar placeholder="Search movies or people..." [(ngModel)]="searchQuery"
-        (keyup.enter)="searchMulti($event)" mode="ios" class="custom-searchbar">
-      </ion-searchbar>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<app-shared-header [showSearch]="true" [pageTitle]="'Cast & Crew'"></app-shared-header>
 
 <ion-content [fullscreen]="true">
 
-  <div *ngIf="isSearchMode || !person" class="history-view">    
+  <div *ngIf="isSearchMode || !person" class="history-view">
     <div class="glass-banner">
       <div class="banner-content">
-        <ion-icon name="information-circle" class="gold-icon"></ion-icon>
-        <ion-icon name="time-outline" class="gold-icon"></ion-icon>
+        <ion-icon name="information-circle-outline" class="gold-icon"></ion-icon>
         <p>Select a cast or crew member from the recently viewed list or use the search bar above.</p>
       </div>
     </div>
 
     <ion-list-header class="custom-header">
-      <ion-label class="section-header">Recently Viewed</ion-label>
-      <ion-button fill="clear" color="medium" size="small" (click)="clearHistory()">Clear All</ion-button>
+      <div class="header-container">
+        <div class="section-header">
+          <h2>Recently Viewed</h2>
+        </div>
+        <ion-button fill="clear" color="medium" size="small" (click)="clearHistory()">
+          Clear All
+        </ion-button>
+      </div>
     </ion-list-header>
 
     <ion-grid class="movie-grid">
@@ -56,67 +30,132 @@
               <ion-icon name="person" class="placeholder-silhouette"></ion-icon>
               <span class="no-image-text">No Image</span>
             </div>
+            <div class="heart-overlay" (click)="toggleFav(p, 'cast'); $event.stopPropagation()">
+              <ion-icon [name]="isFavorite(p.id, 'cast') ? 'heart' : 'heart-outline'"
+                [style.color]="isFavorite(p.id, 'cast') ? '#ff4d4d' : 'white'">
+              </ion-icon>
+            </div>
           </div>
           <p class="main-text">{{ p.name }}</p>
         </ion-col>
       </ion-row>
     </ion-grid>
-
-    <div *ngIf="recentPeople.length === 0" class="ion-padding ion-text-center">
-      <p style="color: #666; font-style: italic;">No history items found.</p>
-    </div>
   </div>
 
   <div *ngIf="!isSearchMode && person" class="person-container">
-    
+
     <div class="profile-header ion-padding-vertical">
       <div class="image-wrapper">
         <div class="portrait-frame profile-portrait-main">
           <img *ngIf="person.profile_path" [src]="'https://image.tmdb.org/t/p/w500' + person.profile_path" />
+
           <div *ngIf="!person.profile_path" class="no-image-wrapper">
             <ion-icon name="person" class="placeholder-silhouette"></ion-icon>
             <span class="no-image-text">No Image</span>
           </div>
+
+          <div class="heart-overlay" (click)="toggleFav(person, 'cast')">
+            <ion-icon [name]="isFavorite(person.id, 'cast') ? 'heart' : 'heart-outline'"
+              [style.color]="isFavorite(person.id, 'cast') ? '#ff4d4d' : 'white'">
+            </ion-icon>
+          </div>
         </div>
       </div>
-      
+
+      <div class="badge-center-wrapper">
+        <ion-badge color="warning" class="role-badge" *ngIf="person.popularity >= 1">
+          <ion-icon name="star-outline"></ion-icon>
+          #{{ person.popularity | number:'1.0-0' }} Popularity
+        </ion-badge>
+      </div>
+
       <h1 class="person-name-title">{{ person.name }}</h1>
-      <ion-badge color="warning" class="role-badge" *ngIf="person.known_for_department">
-        {{ person.known_for_department }}
-      </ion-badge>
+
+      <div class="fav-row-under" (click)="toggleFav(person, 'cast')">
+        <span class="fav-text">
+          {{ isFavorite(person.id, 'cast') ? 'Remove From Favourites' : 'Add To Favourites' }}
+        </span>
+        <ion-icon [name]="isFavorite(person.id, 'cast') ? 'heart' : 'heart-outline'"
+          [style.color]="isFavorite(person.id, 'cast') ? '#ff4d4d' : 'white'">
+        </ion-icon>
+      </div>
     </div>
 
-    <div class="bio-section" *ngIf="person?.biography">
-  <h2 class="section-header">Biography</h2>
-  
-  <div class="bio-flex-container">
-    <div [class.collapsed-bio]="!isBioExpanded" class="bio-content">
-      <p *ngFor="let paragraph of getFormattedBio(person.biography)" class="bio-paragraph">
-        {{ paragraph }}
-      </p>
+    <div class="personal-info-container">
+      <div class="section-header">
+        <h2>Personal Information</h2>
+      </div>
+
+      <div class="info-content"
+        *ngIf="person.birthday || person.deathday || person.also_known_as?.length; else noPersonalInfo">
+        <div *ngIf="person.birthday" class="info-item">
+          <span class="label">Date of birth:</span>
+          <span class="value">{{ person.birthday | date:'longDate' }}</span>
+        </div>
+        <div *ngIf="person.deathday" class="info-item">
+          <span class="label">Date of death:</span>
+          <span class="value">{{ person.deathday | date:'longDate' }}</span>
+        </div>
+        <div *ngIf="person.also_known_as?.length" class="info-item">
+          <span class="label">Also known as:</span>
+          <span class="value">{{ person.also_known_as[0] }}</span>
+        </div>
+      </div>
+
+      <ng-template #noPersonalInfo>
+        <div class="glass-banner sign-banner">
+          <div class="banner-content">
+            <ion-icon name="information-circle-outline" class="gold-icon"></ion-icon>
+            <p>No personal details available for this person.</p>
+          </div>
+        </div>
+      </ng-template>
     </div>
 
-    <div class="bio-toggle-gold" (click)="toggleBio()" *ngIf="person.biography.length > 200">
-      {{ isBioExpanded ? 'SHOW LESS' : 'READ FULL BIO' }}
+    <div class="bio-section">
+      <div class="section-header">
+        <h2>Biography</h2>
+      </div>
+
+      <div *ngIf="getFormattedBio(person.biography).length > 0; else noBio" class="bio-flex-container">
+        <div [class.collapsed-bio]="!isBioExpanded" class="bio-content">
+          <p *ngFor="let paragraph of getFormattedBio(person.biography)" class="bio-paragraph">
+            {{ paragraph }}
+          </p>
+        </div>
+        <div class="bio-toggle-gold" (click)="toggleBio()" *ngIf="person.biography.length > 200">
+          {{ isBioExpanded ? 'SHOW LESS' : 'READ FULL BIO' }}
+        </div>
+      </div>
+
+      <ng-template #noBio>
+        <div class="glass-banner sign-banner">
+          <div class="banner-content">
+            <ion-icon name="person" class="gold-icon"></ion-icon>
+            <p>No biography available for this person.</p>
+          </div>
+        </div>
+      </ng-template>
     </div>
-  </div>
-</div>
 
     <div class="filmography-section" *ngIf="videography.length > 0">
-      <h2 class="section-header">Known For</h2>
-      <div class="cast-scroll-wrapper"> 
+      <div class="section-header">
+        <h2>Known For</h2>
+      </div>
+      <div class="cast-scroll-wrapper">
         <div class="cast-card" *ngFor="let movie of videography" [routerLink]="['/movie-details', movie.id]">
           <div class="portrait-frame">
             <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path" />
-            <div *ngIf="!movie.poster_path" class="grid-no-image">
-              <ion-icon name="videocam"></ion-icon>
-              <span>No Poster</span>
+            <div class="heart-overlay" (click)="toggleFav(movie, 'movie'); $event.stopPropagation()">
+              <ion-icon [name]="isFavorite(movie.id, 'movie') ? 'heart' : 'heart-outline'"
+                [style.color]="isFavorite(movie.id, 'movie') ? '#ff4d4d' : 'white'">
+              </ion-icon>
             </div>
           </div>
           <p class="main-text">{{ movie.title }}</p>
-          <p class="sub-text" *ngIf="movie.release_date">{{ movie.release_date | date:'yyyy' }}</p>
         </div>
       </div>
     </div>
+
   </div>
 </ion-content>

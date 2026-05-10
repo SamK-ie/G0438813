@@ -1,0 +1,28 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="star" class="star-icon" style="color: var(--app-gold)"></ion-icon>
+      {{ pageTitle }} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/home"><ion-icon name="home" class="home-icon"></ion-icon></ion-button>
+      <ion-button routerLink="/favorites"><ion-icon name="heart" class="heart-icon"></ion-icon></ion-button>
+      <ion-button routerLink="/movie-details/null"><ion-icon name="videoCam" class="videoCam-icon"></ion-icon></ion-button>
+      <ion-button routerLink="/cast-crew-details/null"><ion-icon name="star" class="star-icon"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="showSearch">
+    <div class="search-container">
+      <ion-searchbar 
+        placeholder="Search movies or people..." 
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="searchMulti($event)" 
+        mode="ios" 
+        class="custom-searchbar">
+      </ion-searchbar>
+    </div>
+  </ion-toolbar>
+</ion-header>

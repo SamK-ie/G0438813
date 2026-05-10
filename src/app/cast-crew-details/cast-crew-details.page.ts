@@ -2,31 +2,24 @@ import { NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterModule, RouterLink } from '@angular/router';
 import { MovieService } from '../services/movie.service';
+import { SharedHeaderComponent } from '../components/shared-header/shared-header.component';
 import { addIcons } from 'ionicons';
 import {
-  home,
   heart,
-  star,
-  videocam,
   filmOutline,
   searchOutline,
   trendingUpOutline,
   timeOutline,
   person,
+  informationCircleOutline,
+  heartOutline,
 } from 'ionicons/icons';
 import {
   IonBadge,
-
   IonAvatar,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
-  IonButtons,
   IonButton,
   IonIcon,
   IonItem,
@@ -35,29 +28,26 @@ import {
   IonList,
   IonListHeader,
   IonThumbnail,
-  IonBackButton,
   IonGrid,
   IonRow,
   IonCol,
   IonSearchbar,
 } from '@ionic/angular/standalone';
+
 @Component({
   selector: 'app-cast-crew-details',
   templateUrl: './cast-crew-details.page.html',
   styleUrls: ['./cast-crew-details.page.scss'],
   standalone: true,
   imports: [
+    SharedHeaderComponent,
     IonBadge,
     IonAvatar,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     RouterModule,
     RouterLink,
-    IonButtons,
     IonButton,
     IonIcon,
     IonItem,
@@ -66,7 +56,6 @@ import {
     IonList,
     IonListHeader,
     IonThumbnail,
-    IonBackButton,
     IonGrid,
     IonRow,
     IonCol,
@@ -89,41 +78,74 @@ export class CastCrewDetailsPage implements OnInit {
     private navCtrl: NavController,
   ) {
     addIcons({
-      home,
       heart,
-      star,
-      videocam,
       filmOutline,
       searchOutline,
       trendingUpOutline,
       timeOutline,
       person,
+      informationCircleOutline,
+      heartOutline,
     });
   }
 
-  openHistory() {
-  this.isSearchMode = true;
-  this.searchQuery = '';
-  this.loadRecentPeople();
-}
+  // ... rest of your logic functions (ngOnInit, loadPerson, etc.) remain the same
+  ngOnInit() {
+    this.route.params.subscribe((params) => {
+      const id = params['id'];
+      if (!id || id === 'null') {
+        this.isSearchMode = true;
+        this.person = null;
+        this.loadRecentPeople();
+      } else {
+        this.loadPerson(id);
+      }
+    });
+  }
 
- ngOnInit() {
-  this.route.params.subscribe(params => {
-    const id = params['id'];
-    if (!id || id === 'null') {
-      this.isSearchMode = true;
-      this.person = null; 
-      this.loadRecentPeople(); 
+  loadPerson(id: any) {
+    this.isSearchMode = false;
+    this.person = null;
+    this.videography = [];
+
+    this.movieService.getPersonDetails(id).subscribe({
+      next: (res: any) => {
+        this.person = res;
+        this.isBioExpanded = false;
+        this.searchQuery = '';
+        this.loadVideography(id);
+        this.saveToRecent(res);
+      },
+      error: (err) => {
+        console.error('Failed to load person:', err);
+        // Optional: reset to search mode if the API fails
+        this.isSearchMode = true;
+      },
+    });
+  }
+
+  isFavorite(id: number, type: 'movie' | 'cast'): boolean {
+    const key = type === 'movie' ? 'fav_movies' : 'fav_cast';
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    return list.some((item: any) => item.id === id);
+  }
+
+  toggleFav(item: any, type: 'movie' | 'cast') {
+    const key = type === 'movie' ? 'fav_movies' : 'fav_cast';
+    let list = JSON.parse(localStorage.getItem(key) || '[]');
+    const index = list.findIndex((i: any) => i.id === item.id);
+
+    if (index > -1) {
+      list.splice(index, 1);
     } else {
-      this.loadPerson(id); 
+      list.push(item);
     }
-  });
-}
+    localStorage.setItem(key, JSON.stringify(list));
+  }
 
   getFormattedBio(bio: string) {
-    if (!bio) return [];
-    // This splits the long string into an array of strings[cite: 6]
-    return bio.split('. ').map(sentence => sentence.trim() + (sentence.endsWith('.') ? '' : '.'));
+    if (!bio || bio.trim().length === 0) return []; // Explicitly return empty array
+    return bio.split(/\n|\. /).filter((p) => p.trim().length > 0);
   }
 
   toggleBio() {
@@ -132,77 +154,24 @@ export class CastCrewDetailsPage implements OnInit {
 
   loadRecentPeople() {
     const saved = localStorage.getItem('recentPeople');
-    // Slice to 15 people at a time to prevent overwhelming the user
     this.recentPeople = saved ? JSON.parse(saved).slice(0, 15) : [];
-  }
-
-  onSearch() {
-    const text = this.searchQuery.trim();
-    if (!text) {
-      this.searchResults = [];
-      return;
-    }
-    
-    this.movieService.searchPeople(text).subscribe((res: any) => {
-      this.searchResults = res.results; // Returns both Cast and Crew
-    });
-  }
-
-  searchMulti(event?: Event) {
-  if (event) event.preventDefault();
-
-  const searchText = this.searchQuery.trim();
-  if (!searchText) return;
-
-  this.movieService.searchMulti(searchText).subscribe({
-    next: (res: any) => {
-      if (res.results && res.results.length > 0) {
-        const topResult = res.results[0];
-
-        if (topResult.media_type === 'movie') {
-          // Navigating instead of just loading details keeps the URL in sync
-          this.navCtrl.navigateForward(['/movie-details', topResult.id]);
-          this.isHistoryMode = false;
-        } 
-        else if (topResult.media_type === 'person') {
-          this.navCtrl.navigateForward(['/person-details', topResult.id]);
-        }
-
-        this.searchQuery = ''; 
-      } else {
-        console.log("No results found for this database entry.");
-      }
-    },
-    error: (err: any) => {
-      console.error("Database connection failed:", err);
-      // Optional: Add a Toast or Alert here for the user
-    }
-  });
-}
-
-  loadPerson(id: any) {
-    this.movieService.getPersonDetails(id).subscribe((res: any) => {
-      this.person = res;
-      this.isSearchMode = false;
-      this.isBioExpanded = false;
-      this.searchQuery = '';
-      this.loadVideography(id);
-      this.saveToRecent(res);
-    });
   }
 
   loadVideography(id: string) {
     this.movieService.getPersonMovieCredits(id).subscribe((res: any) => {
-      // Sort by popularity and take the top 20
-      this.videography = res.cast
+      const combined = [...(res.cast || []), ...(res.crew || [])];
+      const unique = combined.filter(
+        (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
+      );
+      this.videography = unique
         .sort((a: any, b: any) => b.popularity - a.popularity)
         .slice(0, 20);
+      console.log('Credits loaded:', this.videography);
     });
   }
 
   saveToRecent(person: any) {
     let history = JSON.parse(localStorage.getItem('recentPeople') || '[]');
-    // Filter duplicates and keep top 10
     history = [person, ...history.filter((p: any) => p.id !== person.id)].slice(
       0,
       10,
@@ -212,13 +181,7 @@ export class CastCrewDetailsPage implements OnInit {
   }
 
   clearHistory() {
-  // 1. Wipe the local variable so the screen updates instantly
-  this.recentPeople = [];
-
-  // 2. Wipe the storage so it stays empty when you reload the app
-  localStorage.removeItem('recentPeople');
-  
-  console.log('History cleared!');
-}
-  
+    this.recentPeople = [];
+    localStorage.removeItem('recentPeople');
+  }
 }

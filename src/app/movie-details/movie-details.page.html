@@ -1,55 +1,38 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      <ion-icon name="videocam" class="videocam-icon"></ion-icon> Movie Details
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/home">
-        <ion-icon name="home" class="home-icon"></ion-icon>
-      </ion-button>
-      <ion-button routerLink="/favorites">
-        <ion-icon name="heart" class="heart-icon"></ion-icon>
-      </ion-button>
-      <ion-button (click)="isHistoryMode = !isHistoryMode">
-        <ion-icon [name]="isHistoryMode ? 'videocam' : 'time-outline'" class="videocam-icon"></ion-icon>
-      </ion-button>
-      <ion-button (click)="openHistory()">
-        <ion-icon name="star" class="star-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-
-  <ion-toolbar>
-    <div class="search-container">
-      <ion-searchbar placeholder="Search movies or people" [(ngModel)]="searchQuery"
-        (keyup.enter)="searchMulti($event)" mode="ios" class="custom-searchbar">
-      </ion-searchbar>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<app-shared-header [showSearch]="true" [pageTitle]="'Movie Details'"></app-shared-header>
 
 <ion-content [fullscreen]="true">
 
   <div class="ion-padding" *ngIf="!isHistoryMode && movie">
+
     <div class="poster-container">
-      <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" class="main-poster" />
-      <div *ngIf="!movie.poster_path" class="portrait-frame main-poster">
-         <div class="no-image-wrapper">
-            <ion-icon name="videocam-off-outline"></ion-icon>
-            <span class="no-image-text">No Poster Available</span>
-         </div>
+      <div class="portrait-frame main-poster">
+        <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+        <div class="heart-overlay" (click)="toggleFav(movie, 'movie')">
+          <ion-icon [name]="isFavorite(movie.id, 'movie') ? 'heart' : 'heart-outline'"
+            [style.color]="isFavorite(movie.id, 'movie') ? '#ff4d4d' : 'white'">
+          </ion-icon>
+        </div>
       </div>
     </div>
 
-    <ion-badge color="warning" class="role-badge" style="margin-bottom: 10px;">
-      <ion-icon name="trending-up-outline"></ion-icon>
-      #{{ movie.popularity | number:'1.0-0' }} Trending
-    </ion-badge>
+    <div class="badge-center-wrapper">
+      <ion-badge color="warning" class="role-badge">
+        <ion-icon name="trending-up-outline"></ion-icon>
+        #{{ movie.popularity | number:'1.0-0' }} Trending
+      </ion-badge>
+    </div>
 
     <h1 class="movie-details-title">{{ movie.title }}</h1>
+
+    <div class="fav-row-under" (click)="toggleFav(movie, 'movie')">
+      <span class="fav-text">
+        {{ isFavorite(movie.id, 'movie') ? 'Remove From Favourites' : 'Add To Favourites' }}
+      </span>
+
+      <ion-icon [name]="isFavorite(movie.id, 'movie') ? 'heart' : 'heart-outline'"
+        [style.color]="isFavorite(movie.id, 'movie') ? '#ff4d4d' : 'white'">
+      </ion-icon>
+    </div>
     <p class="bio-paragraph">{{ movie.overview }}</p>
 
     <h2 class="section-header">Top Cast</h2>
@@ -57,6 +40,11 @@
       <div class="cast-card" *ngFor="let castMember of cast" (click)="goToCredits(castMember.id)">
         <div class="portrait-frame">
           <img *ngIf="castMember.profile_path" [src]="'https://image.tmdb.org/t/p/w185' + castMember.profile_path" />
+          <div class="heart-overlay" (click)="toggleFav(castMember, 'cast'); $event.stopPropagation()">
+            <ion-icon [name]="isFavorite(castMember.id, 'cast') ? 'heart' : 'heart-outline'"
+              [style.color]="isFavorite(castMember.id, 'cast') ? '#ff4d4d' : 'white'">
+            </ion-icon>
+          </div>
           <div *ngIf="!castMember.profile_path" class="no-image-wrapper">
             <ion-icon name="person" class="placeholder-silhouette"></ion-icon>
             <span class="no-image-text">No Image</span>
@@ -72,6 +60,11 @@
       <div class="cast-card" *ngFor="let member of crew" (click)="goToCredits(member.id)">
         <div class="portrait-frame">
           <img *ngIf="member.profile_path" [src]="'https://image.tmdb.org/t/p/w185' + member.profile_path" />
+          <div class="heart-overlay" (click)="toggleFav(member, 'cast'); $event.stopPropagation()">
+            <ion-icon [name]="isFavorite(member.id, 'cast') ? 'heart' : 'heart-outline'"
+              [style.color]="isFavorite(member.id, 'cast') ? '#ff4d4d' : 'white'">
+            </ion-icon>
+          </div>
           <div *ngIf="!member.profile_path" class="no-image-wrapper">
             <ion-icon name="person" class="placeholder-silhouette"></ion-icon>
             <span class="no-image-text">No Image</span>
@@ -82,18 +75,23 @@
       </div>
     </div>
   </div>
-
   <div *ngIf="isHistoryMode" class="history-view">
     <div class="glass-banner">
       <div class="banner-content">
-        <ion-icon name="time-outline" class="gold-icon"></ion-icon>
+        <ion-icon name="information-circle-outline" class="gold-icon"></ion-icon>
         <p>Select a movie from the recently viewed list or use the search bar above.</p>
       </div>
     </div>
 
     <ion-list-header class="custom-header">
-      <ion-label class="section-header">Recently Viewed</ion-label>
-      <ion-button fill="clear" color="medium" size="small" (click)="clearHistory()">Clear All</ion-button>
+      <div class="header-container">
+        <div class="section-header">
+          <h2>Recently Viewed</h2>
+        </div>
+        <ion-button fill="clear" color="medium" size="small" (click)="clearHistory()">
+          Clear All
+        </ion-button>
+      </div>
     </ion-list-header>
 
     <ion-grid class="movie-grid">
@@ -101,9 +99,10 @@
         <ion-col size="4" *ngFor="let m of recentlyViewedMovies" (click)="loadDetails(m.id); isHistoryMode = false">
           <div class="grid-poster-frame">
             <img *ngIf="m.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + m.poster_path" />
-            <div *ngIf="!m.poster_path" class="grid-no-image">
-              <ion-icon name="videocam"></ion-icon>
-              <span>No Poster</span>
+            <div class="heart-overlay" (click)="toggleFav(m, 'movie'); $event.stopPropagation()">
+              <ion-icon [name]="isFavorite(m.id, 'movie') ? 'heart' : 'heart-outline'"
+                [style.color]="isFavorite(m.id, 'movie') ? '#ff4d4d' : 'white'">
+              </ion-icon>
             </div>
           </div>
           <p class="main-text">{{ m.title }}</p>

@@ -1,25 +1,4 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>
-      <ion-icon name="home" class="home-icon"></ion-icon>
-      G0438813
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/home">
-        <ion-icon name="home" class="home-icon"></ion-icon>
-      </ion-button>
-      <ion-button routerLink="/favorites">
-        <ion-icon name="heart" class="heart-icon"></ion-icon>
-      </ion-button>
-      <ion-button routerLink="/movie-details/null">
-        <ion-icon name="videocam" class="videocam-icon"></ion-icon>
-      </ion-button>
-      <ion-button (click)="openHistory()">
-        <ion-icon name="star" class="star-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-shared-header [showSearch]="false" [pageTitle]="'G0438813'"></app-shared-header>
 
 <ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
   
@@ -44,9 +23,9 @@
     </div>
   </div>
 
-  <ion-list-header>
-    <ion-label class="section-header">{{ listTitle }}</ion-label>
-  </ion-list-header>
+  <div class="section-header">
+  <h2>{{ listTitle }}</h2>
+</div>
 
   <ion-grid class="movie-grid" *ngIf="movies.length > 0">
     <ion-row>
