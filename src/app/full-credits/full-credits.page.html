@@ -1,6 +1,6 @@
 <app-shared-header [showSearch]="true"></app-shared-header>
 
-<ion-content [fullscreen] = "true" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
+<ion-content [fullscreen] = "false" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showBackToTop">
     <ion-fab-button color="warning" (click)="scrollToTop()" size="small">
       <ion-icon name="arrow-up"></ion-icon>
