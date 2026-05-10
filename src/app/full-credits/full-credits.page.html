@@ -1,6 +1,6 @@
 <app-shared-header [showSearch]="true"></app-shared-header>
 
-<ion-content [fullscreen] = "false" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
+<ion-content [fullscreen]="false" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showBackToTop">
     <ion-fab-button color="warning" (click)="scrollToTop()" size="small">
       <ion-icon name="arrow-up"></ion-icon>
@@ -8,9 +8,9 @@
   </ion-fab>
   <div class="hero-container" *ngIf="headerData">
     <div class="hero-content">
-      
-      <div class="grid-poster-frame hero-poster" 
-           [routerLink]="type === 'movie' ? ['/movie-details', id] : ['/cast-crew-details', id]">
+
+      <div class="grid-poster-frame hero-poster"
+        [routerLink]="type === 'movie' ? ['/movie-details', id] : ['/cast-crew-details', id]" routerDirection="back">
         <img [src]="'https://image.tmdb.org/t/p/w500' + headerData.img" *ngIf="headerData.img" />
         <div *ngIf="!headerData.img" class="grid-no-image">
           <ion-icon [name]="type === 'movie' ? 'videocam' : 'person'"></ion-icon>
@@ -24,56 +24,55 @@
         <p class="hero-subtitle" *ngIf="type === 'person'">{{ headerData.info }}</p>
       </div>
 
-      <ion-button expand="block" class="details-btn hero-btn" 
-                  [routerLink]="type === 'movie' ? ['/movie-details', id] : ['/cast-crew-details', id]">
+      <ion-button expand="block" class="details-btn hero-btn"
+        [routerLink]="type === 'movie' ? ['/movie-details', id] : ['/cast-crew-details', id]">
         DETAILS
       </ion-button>
 
     </div>
   </div>
 
-      <ion-segment [(ngModel)]="activeTab" mode="md" class="custom-segment">
-        <ion-segment-button value="cast">
-          <ion-label>{{ type === 'person' ? 'ACTING' : 'CAST' }}</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="crew">
-          <ion-label>{{ type === 'person' ? 'PRODUCTION' : 'CREW' }}</ion-label>
-        </ion-segment-button>
-      </ion-segment>
+  <ion-segment [(ngModel)]="activeTab" mode="md" class="custom-segment">
+    <ion-segment-button value="cast">
+      <ion-label>{{ type === 'person' ? 'ACTING' : 'CAST' }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="crew">
+      <ion-label>{{ type === 'person' ? 'PRODUCTION' : 'CREW' }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-      <ion-grid class="movie-grid">
-        <ion-row>
-          <ion-col size="4" *ngFor="let item of (activeTab === 'cast' ? castData : crewData)">
-            <div class="grid-poster-frame"
-              [routerLink]="type === 'person' ? ['/movie-details', item.id] : ['/cast-crew-details', item.id]">
+  <ion-grid class="movie-grid">
+    <ion-row>
+      <ion-col size="4" *ngFor="let item of (activeTab === 'cast' ? castData : crewData)">
+        <div class="grid-poster-frame"
+          [routerLink]="type === 'person' ? ['/movie-details', item.id] : ['/cast-crew-details', item.id]">
 
-              <img *ngIf="item.poster_path || item.profile_path"
-                [src]="'https://image.tmdb.org/t/p/w342' + (item.poster_path || item.profile_path)" />
+          <img *ngIf="item.poster_path || item.profile_path"
+            [src]="'https://image.tmdb.org/t/p/w342' + (item.poster_path || item.profile_path)" />
 
-              <div *ngIf="!(item.poster_path || item.profile_path)" class="grid-no-image">
-                <ion-icon [name]="type === 'person' && activeTab === 'crew' ? 'videocam' : 'person'"></ion-icon>
-                <span>No Image</span>
-              </div>
+          <div *ngIf="!(item.poster_path || item.profile_path)" class="grid-no-image">
+            <ion-icon [name]="type === 'person' && activeTab === 'crew' ? 'videocam' : 'person'"></ion-icon>
+            <span>No Image</span>
+          </div>
 
-              <div class="heart-overlay"
-                (click)="toggleFav(item, (type === 'person' ? 'movie' : 'cast')); $event.stopPropagation()">
-                <ion-icon
-                  [name]="isFavorite(item.id, (type === 'person' ? 'movie' : 'cast')) ? 'heart' : 'heart-outline'"
-                  [style.color]="isFavorite(item.id, (type === 'person' ? 'movie' : 'cast')) ? '#ff4d4d' : 'white'">
-                </ion-icon>
-              </div>
-            </div>
+          <div class="heart-overlay"
+            (click)="toggleFav(item, (type === 'person' ? 'movie' : 'cast')); $event.stopPropagation()">
+            <ion-icon [name]="isFavorite(item.id, (type === 'person' ? 'movie' : 'cast')) ? 'heart' : 'heart-outline'"
+              [style.color]="isFavorite(item.id, (type === 'person' ? 'movie' : 'cast')) ? '#ff4d4d' : 'white'">
+            </ion-icon>
+          </div>
+        </div>
 
-            <p class="main-text">{{ item.title || item.name }}</p>
-            <p class="sub-text">{{ item.character || item.job }}</p>
-            <p class="sub-text" *ngIf="item.release_date" style="color: var(--ion-color-medium)">
-              {{ item.release_date | date:'yyyy' }}
-            </p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+        <p class="main-text">{{ item.title || item.name }}</p>
+        <p class="sub-text">{{ item.character || item.job }}</p>
+        <p class="sub-text" *ngIf="item.release_date" style="color: var(--ion-color-medium)">
+          {{ item.release_date | date:'yyyy' }}
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-      <ion-infinite-scroll (ionInfinite)="loadMore($event)">
-        <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

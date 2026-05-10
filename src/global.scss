@@ -419,7 +419,6 @@ html, body {
   height: 100% !important;
   width: 100% !important;
   overflow: hidden !important;
-  position: fixed;
 }
 
 ion-header {
@@ -432,26 +431,7 @@ ion-header {
     --background: var(--ion-toolbar-background, var(--ion-background-color));
     --color: var(--ion-toolbar-color, var(--ion-text-color));
     --border-style: none;
-    --padding-top: env(safe-area-inset-top);
-  }
-}
-
-ion-back-button {
-  display: block !important;
-  --color: var(--app-gold, #ffd700);
-}
-
-.search-container {
-  padding: 4px 16px 12px;
-  background: var(--ion-background-color);
-
-  .custom-searchbar {
-    --background: var(--ion-color-step-150, #eeeeee);
-    --color: var(--ion-text-color);
-    --placeholder-color: var(--ion-color-step-600);
-    --icon-color: var(--app-gold, #ffd700);
-    --border-radius: 8px;
-    margin: 0;
+    --padding-top: var(--ion-safe-area-top, 0);
   }
 }
 
@@ -462,25 +442,12 @@ ion-content {
   --padding-bottom: env(safe-area-inset-bottom);
 }
 
-.title-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  
-  span {
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--ion-text-color);
-  }
-}
-
 .section-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-right: 16px;
-  margin-top: 20px;
+  margin-top: 10px;
 
   .section-header {
     border-left: 4px solid var(--app-gold) !important;
