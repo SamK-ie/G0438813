@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="main-nav-toolbar">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" icon="chevron-back"></ion-back-button>
+      <ion-back-button defaultHref="/home" icon="chevron-back" mode="md"></ion-back-button>
     </ion-buttons>
 
     <ion-title>
@@ -13,16 +13,16 @@
 
     <ion-buttons slot="end">
       <ion-button routerLink="/home">
-        <ion-icon name="home" class="home-icon"></ion-icon>
+        <ion-icon slot="icon-only" name="home" class="home-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/favorites">
-        <ion-icon name="heart" class="heart-icon"></ion-icon>
+        <ion-icon slot="icon-only" name="heart" class="heart-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/movie-details/null">
-        <ion-icon name="videocam" class="videoCam-icon"></ion-icon>
+        <ion-icon slot="icon-only" name="videocam" class="videoCam-icon"></ion-icon>
       </ion-button>
       <ion-button routerLink="/cast-crew-details/null">
-        <ion-icon name="star" class="star-icon"></ion-icon>
+        <ion-icon slot="icon-only" name="star" class="star-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -30,8 +30,8 @@
   <ion-toolbar *ngIf="showSearch">
     <div class="search-container">
       <ion-searchbar 
-      placeholder="Search movies or people..." 
-      [(ngModel)]="searchQuery"
+        placeholder="Search movies or people..." 
+        [(ngModel)]="searchQuery"
         (keyup.enter)="searchMulti($event)" 
         mode="ios" 
         class="custom-searchbar">
