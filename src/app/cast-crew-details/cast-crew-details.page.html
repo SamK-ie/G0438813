@@ -138,29 +138,32 @@
       </ng-template>
     </div>
 
-    <div class="filmography-section" *ngIf="videography.length > 0">
-  <div class="section-header-container">
-    <div class="section-header">
-      <h2>Known For</h2>
-    </div>
+  <div class="filmography-section" *ngIf="videography.length > 0">
+      <h2 class="section-header">Known For</h2>
     <ion-button fill="clear" color="warning" [routerLink]="['/full-credits', person.id, 'person']">
-      See All
+      SEE ALL
     </ion-button>
-  </div>
-      <div class="cast-scroll-wrapper">
-        <div class="cast-card" *ngFor="let movie of videography" [routerLink]="['/movie-details', movie.id]">
-          <div class="portrait-frame">
-            <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path" />
-            <div class="heart-overlay" (click)="toggleFav(movie, 'movie'); $event.stopPropagation()">
-              <ion-icon [name]="isFavorite(movie.id, 'movie') ? 'heart' : 'heart-outline'"
-                [style.color]="isFavorite(movie.id, 'movie') ? '#ff4d4d' : 'white'">
-              </ion-icon>
-            </div>
-          </div>
-          <p class="main-text">{{ movie.title }}</p>
+
+  <div class="cast-scroll-wrapper">
+    <div class="cast-card" *ngFor="let movie of videography" [routerLink]="['/movie-details', movie.id]">
+      <div class="portrait-frame">
+        <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w342' + movie.poster_path" />
+        
+        <div *ngIf="!movie.poster_path" class="no-image-wrapper">
+          <ion-icon name="videocam" class="placeholder-silhouette"></ion-icon>
+          <span class="no-image-text">No Image</span>
+        </div>
+
+        <div class="heart-overlay" (click)="toggleFav(movie, 'movie'); $event.stopPropagation()">
+          <ion-icon [name]="isFavorite(movie.id, 'movie') ? 'heart' : 'heart-outline'"
+            [style.color]="isFavorite(movie.id, 'movie') ? '#ff4d4d' : 'white'">
+          </ion-icon>
         </div>
       </div>
+      <p class="main-text">{{ movie.title }}</p>
     </div>
+  </div>
+</div>
 
   </div>
 </ion-content>

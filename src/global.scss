@@ -270,6 +270,14 @@ h3 {
 }
 
 /* --- 9. BIO TOGGLE --- */
+.bio-section {
+  padding-bottom: 20px;
+}
+.bio-flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .bio-content {
   transition: max-height 0.5s ease-in-out;
   overflow: hidden;
@@ -291,12 +299,13 @@ h3 {
 .bio-toggle-gold {
   color: var(--app-gold);
   font-weight: bold;
-  padding: 10px 0;
+  padding: 12px 20px;
   cursor: pointer;
   text-transform: uppercase;
   display: inline-block;
-  z-index: 10;
+  z-index: 20;
   position: relative;
+  margin-top: 10px;
 }
 
 /* --- 10. FAVORITES--- */
@@ -343,10 +352,30 @@ h3 {
   overflow-x: auto !important;
   padding: 0 16px 20px 16px;
   gap: 15px;
+  -webkit-overflow-scrolling: touch;
+
   &::-webkit-scrollbar {
     display: none;
   }
+  
+  @media (pointer: fine) {
+    &::-webkit-scrollbar {
+      display: block;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); 
+    border-radius: 10px;
+    margin: 0 16px; 
+  }
+    &::-webkit-scrollbar-thumb {
+      background: var(--app-gold);
+      border-radius: 10px;
+      border: 2px solid #000;
+    }
+  }
 }
+
 .cast-card {
   flex: 0 0 100px !important;
   width: 100px !important;
@@ -415,18 +444,21 @@ h3 {
 
 /* --- 13. MOBILE CONTROLS --- */
 
-html, body {
+html,
+body {
   height: 100% !important;
   width: 100% !important;
 }
 
 ion-header {
   background: var(--ion-background-color);
+  padding-top: env(safe-area-inset-top);
 
   ion-toolbar {
     --background: var(--ion-toolbar-background, var(--ion-background-color));
     --border-style: none;
     --color: var(--ion-toolbar-color, var(--ion-text-color));
+    padding-top: 8px;
   }
 }
 .main-nav-toolbar {
@@ -455,12 +487,16 @@ ion-content {
   .section-header {
     border-left: 4px solid var(--app-gold) !important;
     padding-left: 12px !important;
-    margin: 0 !important; 
-    
+    margin: 0 !important;
+
     h2 {
       margin: 0 !important;
       line-height: 1.2;
       color: var(--app-gold) !important;
     }
+  }
 }
+ion-fab {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 16px);
+  margin-right: 16px;
 }

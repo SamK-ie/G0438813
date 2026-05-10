@@ -9,6 +9,7 @@ import { Router, RouterModule, RouterLink } from '@angular/router';
 import { SharedHeaderComponent } from '../components/shared-header/shared-header.component';
 import { addIcons } from 'ionicons';
 import {
+  videocam,
   heart,
   heartOutline,
   trendingUpOutline,
@@ -64,6 +65,7 @@ export class MovieDetailsPage implements OnInit {
   ) {
  
     addIcons({
+      videocam,
       heart,
       heartOutline,
       trendingUpOutline,
@@ -111,6 +113,7 @@ export class MovieDetailsPage implements OnInit {
     this.isHistoryMode = false;
     this.movieService.getMovieDetails(id).subscribe((res: any) => {
       this.movie = res;
+      this.getCast(id);
       let history = JSON.parse(localStorage.getItem('recentlyViewedMovies') || '[]');
       history.unshift(res);
       history = history
