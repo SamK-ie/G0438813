@@ -14,20 +14,7 @@ import {
   peopleOutline,
   filmOutline,
 } from 'ionicons/icons';
-import {
-  IonFabButton,
-  IonFab,
-  IonRow,
-  IonCol,
-  IonGrid,
-  IonIcon,
-  IonContent,
-  IonLabel,
-  IonSegment,
-  IonSegmentButton,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-} from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-full-credits',
@@ -35,27 +22,15 @@ import {
   styleUrls: ['./full-credits.page.scss'],
   standalone: true,
   imports: [
-    IonFabButton,
-    IonFab,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonIcon,
-    IonContent,
     CommonModule,
     FormsModule,
     RouterModule,
     SharedHeaderComponent,
-    IonContent,
-    IonLabel,
-    IonSegment,
-    IonSegmentButton,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
+    IonicModule,
   ],
 })
 export class FullCreditsPage implements OnInit {
-  @ViewChild(IonContent) content!: IonContent;
+  @ViewChild('myContent') content!: any;
   showBackToTop = false;
   id: string | null = null;
   type: 'movie' | 'person' | null = null;
@@ -159,5 +134,4 @@ export class FullCreditsPage implements OnInit {
   scrollToTop() {
     this.content.scrollToTop(500);
   }
-}  
-
+}

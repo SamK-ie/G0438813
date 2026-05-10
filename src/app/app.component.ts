@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { IonicModule } from '@ionic/angular'; 
 
 @Component({
   selector: 'app-root',
   template: '<ion-app><ion-router-outlet></ion-router-outlet></ion-app>',
-  standalone: true, // MUST be true
-  imports: [IonApp, IonRouterOutlet], // MUST include these two
+  standalone: true,
+  imports: [IonicModule,],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
 })
 export class AppComponent {}

@@ -1,6 +1,6 @@
 <app-shared-header [showSearch]="false"></app-shared-header>
 
-<ion-content [fullscreen]="false" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
+<ion-content #myContent [fullscreen]="false" [scrollEvents]="true" (ionScroll)="handleScroll($event)">
   
   <div class="search-section ion-padding">
     <h2 class="search-title">Welcome to the Movie App</h2>

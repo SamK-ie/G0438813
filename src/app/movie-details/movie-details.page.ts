@@ -17,14 +17,7 @@ import {
   informationCircleOutline
 } from 'ionicons/icons';
 import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonContent,
-  IonButton,
-  IonIcon,
-  IonListHeader,
-  IonBadge,
+  IonicModule,
 } from '@ionic/angular';
 
 @Component({
@@ -34,18 +27,11 @@ import {
   standalone: true,
   imports: [
     SharedHeaderComponent, 
-    IonContent,
-    IonButton,
-    IonIcon,
     CommonModule,
     FormsModule,
     RouterLink,
     RouterModule,
-    IonListHeader,
-    IonBadge,
-    IonGrid,
-    IonRow,
-    IonCol,
+    IonicModule,
   ],
 })
 export class MovieDetailsPage implements OnInit {

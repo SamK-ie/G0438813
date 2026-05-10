@@ -17,15 +17,7 @@ import {
   timeOutline,
 } from 'ionicons/icons';
 import {
-  IonRow,
-  IonCol,
-  IonContent,
-  IonButton,
-  IonIcon,
-  IonLabel,
-  IonSegment,
-  IonSegmentButton,
-  IonGrid,
+  IonicModule,
 } from '@ionic/angular';
 
 @Component({
@@ -35,19 +27,11 @@ import {
   standalone: true,
   imports: [
     SharedHeaderComponent,
-    IonContent,
     CommonModule,
     FormsModule,
     RouterModule,
     RouterLink,
-    IonButton,
-    IonIcon,
-    IonLabel,
-    IonSegment,
-    IonSegmentButton,
-    IonRow,
-    IonCol,
-    IonGrid,
+    IonicModule,
   ],
 })
 export class FavouritesPage implements OnInit {

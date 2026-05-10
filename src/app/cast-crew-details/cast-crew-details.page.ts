@@ -17,14 +17,7 @@ import {
   heartOutline,
 } from 'ionicons/icons';
 import {
-  IonBadge,
-  IonContent,
-  IonButton,
-  IonIcon,
-  IonListHeader,
-  IonGrid,
-  IonRow,
-  IonCol,
+  IonicModule,
 } from '@ionic/angular';
 
 @Component({
@@ -34,18 +27,11 @@ import {
   standalone: true,
   imports: [
     SharedHeaderComponent,
-    IonBadge,
-    IonContent,
     CommonModule,
     FormsModule,
     RouterModule,
     RouterLink,
-    IonButton,
-    IonIcon,
-    IonListHeader,
-    IonGrid,
-    IonRow,
-    IonCol,
+    IonicModule,
   ],
 })
 export class CastCrewDetailsPage implements OnInit {

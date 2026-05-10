@@ -17,20 +17,7 @@ import {
   arrowUp,
 } from 'ionicons/icons';
 import {
-  IonContent,
-  IonButton,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonChip,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonFab,
-  IonFabButton,
+  IonicModule,
 } from '@ionic/angular';
 
 @Component({
@@ -44,24 +31,11 @@ import {
     FormsModule,
     RouterModule,
     RouterLink,
-    IonContent,
-    IonButton,
-    IonIcon,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonChip,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
-    IonFab,
-    IonFabButton,
+    IonicModule,
   ],
 })
 export class HomePage implements OnInit {
-  @ViewChild(IonContent) content!: IonContent;
+  @ViewChild('myContent') content!: any;
 
   movies: any[] = [];
   searchQuery: string = '';
