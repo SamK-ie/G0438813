@@ -1,14 +1,16 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/home" icon="chevron-back"></ion-back-button>
     </ion-buttons>
+    
     <ion-title>
-     <div class="title-wrapper">
-        <ion-icon name="star" class="star-icon" style="color: var(--app-gold)"></ion-icon>
+      <div class="title-wrapper">
+        <ion-icon name="star" class="star-icon" style="color: #ffd700"></ion-icon>
         <span>{{ pageTitle }}</span>
       </div>
     </ion-title>
+
     <ion-buttons slot="end">
       <ion-button routerLink="/home"><ion-icon name="home" class="home-icon"></ion-icon></ion-button>
       <ion-button routerLink="/favorites"><ion-icon name="heart" class="heart-icon"></ion-icon></ion-button>
@@ -18,7 +20,7 @@
   </ion-toolbar>
 
   <ion-toolbar *ngIf="showSearch">
-    <div class="search-container ion-padding-horizontal">
+    <div class="search-container">
       <ion-searchbar 
         placeholder="Search movies or people..." 
         [(ngModel)]="searchQuery"

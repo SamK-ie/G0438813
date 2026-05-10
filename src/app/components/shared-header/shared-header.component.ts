@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { addIcons } from 'ionicons';
 import {
+  chevronBack,
   heart,
   home,
   videocam,
@@ -31,6 +32,7 @@ export class SharedHeaderComponent {
     private navCtrl: NavController
   ) {
     addIcons({
+      chevronBack,
       heart,
       search,
       searchOutline,

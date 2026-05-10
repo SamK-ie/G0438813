@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MovieService } from '../services/movie.service';
 import { SharedHeaderComponent } from '../components/shared-header/shared-header.component';
+import { ViewChild } from '@angular/core';
 import { addIcons } from 'ionicons';
 import {
   heart,
@@ -14,6 +15,8 @@ import {
   filmOutline,
 } from 'ionicons/icons';
 import {
+  IonFabButton,
+  IonFab,
   IonRow,
   IonCol,
   IonGrid,
@@ -32,6 +35,8 @@ import {
   styleUrls: ['./full-credits.page.scss'],
   standalone: true,
   imports: [
+    IonFabButton,
+    IonFab,
     IonGrid,
     IonRow,
     IonCol,
@@ -50,6 +55,8 @@ import {
   ],
 })
 export class FullCreditsPage implements OnInit {
+  @ViewChild(IonContent) content!: IonContent;
+  showBackToTop = false;
   id: string | null = null;
   type: 'movie' | 'person' | null = null;
   activeTab: 'cast' | 'crew' = 'cast';
@@ -144,4 +151,13 @@ export class FullCreditsPage implements OnInit {
     }
     localStorage.setItem(key, JSON.stringify(list));
   }
-}
+
+  handleScroll(ev: any) {
+    this.showBackToTop = ev.detail.scrollTop > 400;
+  }
+
+  scrollToTop() {
+    this.content.scrollToTop(500);
+  }
+}  
+

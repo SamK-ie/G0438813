@@ -410,23 +410,62 @@ h3 {
   }
 }
 
-/* --- 13. MOBILE HEADER CONTROLS --- */
+/* --- 13. MOBILE CONTROLS --- */
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 
 ion-header {
   display: block !important;
   position: relative !important;
   z-index: 100;
+
+ion-toolbar {
+    --background: #121212; /* Solid dark background */
+    --color: white;
+    --border-style: none;
+  }
+}
+
+ion-back-button {
+  display: block !important;
+  --color: var(--ion-color-primary, #ffd700);
 }
 
 .search-container {
-  width: 100%;
-  background: transparent;
-  display: flex;
-  align-items: center;
-}
+  padding: 4px 16px 12px;
+  background: #121212;
 
 .custom-searchbar {
-  --background: #333;
-  --color: white;
-  --icon-color: var(--app-gold);
+    --background: #222;
+    --color: white;
+    --placeholder-color: #999;
+    --icon-color: #ffd700;
+    --border-radius: 8px;
+    margin: 0;
+  }
 }
+
+ion-content {
+  --offset-bottom: 0px !important;
+  --offset-top: 0px !important;
+  height: 100%;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+
+
