@@ -7,6 +7,7 @@ import { MovieService } from '../../services/movie.service';
 import { filter } from 'rxjs/operators';
 import { addIcons } from 'ionicons';
 import {
+  film,
   chevronBack,
   heart,
   home,
@@ -29,6 +30,7 @@ export class SharedHeaderComponent implements OnInit {
   @Input() showSearch: boolean = true;
   pageTitle: string = 'G0438813';
   headerIcon: string = 'home';
+  headerIconClass: string = 'home-icon';
   searchQuery: string = '';
 
   constructor(
@@ -37,6 +39,7 @@ export class SharedHeaderComponent implements OnInit {
     private navCtrl: NavController
   ) {
     addIcons({
+      film,
       chevronBack,
       heart,
       search,
@@ -62,18 +65,23 @@ export class SharedHeaderComponent implements OnInit {
     if (url.includes('movie-details')) {
       this.pageTitle = 'Movie Details';
       this.headerIcon = 'videocam';
+      this.headerIconClass = 'videoCam-icon';
     } else if (url.includes('cast-crew-details')) {
       this.pageTitle = 'Cast & Crew';
-      this.headerIcon = 'person';
+      this.headerIcon = 'star';
+      this.headerIconClass = 'star-icon';
     } else if (url.includes('favorites')) {
       this.pageTitle = 'Favourites';
       this.headerIcon = 'heart';
+      this.headerIconClass = 'heart-icon';
     } else if (url.includes('full-credits')) {
       this.pageTitle = 'Full Credits';
-      this.headerIcon = 'list';
+      this.headerIcon = 'film';
+      this.headerIconClass = 'film-icon';
     } else {
       this.pageTitle = 'G0438813';
-      this.headerIcon = 'star';
+      this.headerIcon = 'home';
+      this.headerIconClass = 'home-icon';
     }
   }
 
