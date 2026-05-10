@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">G0438813</string>
+    <string name="title_activity_main">G0438813</string>
+    <string name="package_name">com.G0438813.movieapp</string>
+    <string name="custom_url_scheme">com.G0438813.movieapp</string>
+</resources>
